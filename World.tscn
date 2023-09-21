@@ -1,0 +1,220 @@
+[gd_scene load_steps=31 format=3 uid="uid://ck1h771dply0g"]
+
+[ext_resource type="Script" path="res://scripts/Camera3D.gd" id="1_oowxb"]
+[ext_resource type="Shader" path="res://shaders/water.gdshader" id="2_6nog1"]
+[ext_resource type="Material" uid="uid://w0521xyotujb" path="res://standard_shaders/pink.tres" id="4_3d1xh"]
+[ext_resource type="Material" uid="uid://due1qpgfoidud" path="res://standard_shaders/green.tres" id="5_731fp"]
+[ext_resource type="Shader" path="res://shaders/bottom.gdshader" id="6_dtw72"]
+[ext_resource type="Material" uid="uid://khxhx4mnugb1" path="res://standard_shaders/yellow.tres" id="6_u1h6e"]
+[ext_resource type="PackedScene" uid="uid://durvbjhil7ec1" path="res://scenes/Pier.tscn" id="7_bj37i"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_14kcx"]
+sky_top_color = Color(0.298039, 0.756863, 0.984314, 1)
+sky_horizon_color = Color(0.521569, 0.682353, 0.752941, 1)
+sky_curve = 0.261165
+ground_bottom_color = Color(0.156863, 0.356863, 0.717647, 1)
+ground_horizon_color = Color(0.109804, 0.411765, 0.556863, 1)
+sun_angle_max = 344.09
+sun_curve = 0.0137258
+
+[sub_resource type="Sky" id="Sky_m3s1f"]
+sky_material = SubResource("ProceduralSkyMaterial_14kcx")
+process_mode = 1
+
+[sub_resource type="Environment" id="Environment_nbsfo"]
+background_mode = 2
+sky = SubResource("Sky_m3s1f")
+ambient_light_source = 3
+ambient_light_color = Color(1, 1, 1, 1)
+fog_light_color = Color(0.0588235, 0.552941, 0.976471, 1)
+fog_light_energy = 0.51
+fog_density = 0.0
+fog_sky_affect = 0.0
+volumetric_fog_density = 0.0038
+volumetric_fog_albedo = Color(0.556863, 0.854902, 1, 1)
+volumetric_fog_anisotropy = 0.29
+volumetric_fog_length = 494.61
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_hnmyy"]
+size = Vector2(320, 320)
+subdivide_width = 1000
+subdivide_depth = 1000
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_v1q6j"]
+noise_type = 3
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_nakla"]
+seamless = true
+as_normal_map = true
+bump_strength = 10.2
+noise = SubResource("FastNoiseLite_v1q6j")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_d0odo"]
+fractal_type = 2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_bxqt0"]
+seamless = true
+as_normal_map = true
+noise = SubResource("FastNoiseLite_d0odo")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_owqak"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ppy63"]
+seamless = true
+noise = SubResource("FastNoiseLite_owqak")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_xtebi"]
+fractal_type = 2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_qeaub"]
+seamless = true
+noise = SubResource("FastNoiseLite_xtebi")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jsv1i"]
+render_priority = 0
+shader = ExtResource("2_6nog1")
+shader_parameter/albedo = Color(0.02, 0.45, 0.8, 1)
+shader_parameter/surface_texture_direction = Vector2(-1, 0)
+shader_parameter/surface_texture_direction2 = Vector2(0, 1)
+shader_parameter/surface_texture_roughness = 0.6
+shader_parameter/surface_texture_scale = 0.3
+shader_parameter/surface_texture_time_scale = 0.06
+shader_parameter/ssr_resolution = 2.0
+shader_parameter/ssr_max_travel = 30.0
+shader_parameter/ssr_max_diff = 4.0
+shader_parameter/ssr_mix_strength = 0.7
+shader_parameter/wave_noise_scale = 15.0
+shader_parameter/wave_height_scale = 0.25
+shader_parameter/wave_time_scale = 0.025
+shader_parameter/wave_normal_flatness = 30.0
+shader_parameter/border_color = Color(1, 1, 1, 1)
+shader_parameter/border_scale = 2.0
+shader_parameter/border_near = 0.5
+shader_parameter/border_far = 300.0
+shader_parameter/transparency = 0.4
+shader_parameter/max_visible_depth = 10.0
+shader_parameter/color_deep = Color(0, 0.1, 0.4, 1)
+shader_parameter/metallic = 0.0
+shader_parameter/roughness = 0.5
+shader_parameter/wave1 = SubResource("NoiseTexture2D_ppy63")
+shader_parameter/wave2 = SubResource("NoiseTexture2D_qeaub")
+shader_parameter/texture_normal = SubResource("NoiseTexture2D_nakla")
+shader_parameter/texture_normal2 = SubResource("NoiseTexture2D_bxqt0")
+
+[sub_resource type="BoxMesh" id="BoxMesh_21ju6"]
+size = Vector3(50, 1, 2)
+
+[sub_resource type="SphereMesh" id="SphereMesh_0b3qk"]
+radius = 8.0
+height = 16.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_37lja"]
+radius = 5.0
+height = 10.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_un52x"]
+radius = 2.0
+height = 4.0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_x888m"]
+size = Vector2(320, 320)
+subdivide_width = 200
+subdivide_depth = 200
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_8j0ft"]
+frequency = 0.0056
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_lawpj"]
+seamless = true
+noise = SubResource("FastNoiseLite_8j0ft")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_65ep2"]
+noise_type = 4
+frequency = 0.5041
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ko5xt"]
+width = 1024
+height = 1024
+seamless = true
+noise = SubResource("FastNoiseLite_65ep2")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y71r8"]
+render_priority = 0
+shader = ExtResource("6_dtw72")
+shader_parameter/height_scale = 70.0
+shader_parameter/uv_scale = 400.0
+shader_parameter/texture_scale = 20.0
+shader_parameter/stone_texture = SubResource("NoiseTexture2D_ko5xt")
+shader_parameter/bottom = SubResource("NoiseTexture2D_lawpj")
+
+[node name="World" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_nbsfo")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.864275, 0.42705, -0.265815, 0, 0.528438, 0.848972, 0.50302, 0.733745, -0.456716, -103.155, 28.088, -116.302)
+light_color = Color(1, 0.956863, 0.905882, 1)
+light_energy = 1.08
+shadow_enabled = true
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-0.745476, 0.21039, -0.632457, 0, 0.948876, 0.315649, 0.666533, 0.235309, -0.707364, -129.747, 14.606, -113.29)
+script = ExtResource("1_oowxb")
+
+[node name="WaterSurface" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0266228, 0.112858, -0.0368958)
+mesh = SubResource("PlaneMesh_hnmyy")
+surface_material_override/0 = SubResource("ShaderMaterial_jsv1i")
+
+[node name="scenery" type="Node3D" parent="."]
+
+[node name="Pier" parent="scenery" instance=ExtResource("7_bj37i")]
+transform = Transform3D(-1.99631, 0, 0.121435, 0, 2, 0, -0.121435, 0, -1.99631, -42.0222, 4.60747, -76.6392)
+
+[node name="boxes" type="Node3D" parent="scenery"]
+
+[node name="Box1" type="MeshInstance3D" parent="scenery/boxes"]
+transform = Transform3D(0.57211, -0.456602, -0.681325, 0.636205, 0.771326, 0.0173053, 0.517622, -0.443363, 0.731776, -134.206, 4.05422, -77.1431)
+mesh = SubResource("BoxMesh_21ju6")
+skeleton = NodePath("../../..")
+surface_material_override/0 = ExtResource("4_3d1xh")
+
+[node name="Box2" type="MeshInstance3D" parent="scenery/boxes"]
+transform = Transform3D(-0.735081, 0.599193, 0.317212, 0.636205, 0.771326, 0.0173053, -0.234305, 0.214533, -0.948197, -116.454, 4.05422, -77.1431)
+mesh = SubResource("BoxMesh_21ju6")
+skeleton = NodePath("../../..")
+surface_material_override/0 = ExtResource("5_731fp")
+
+[node name="Box3" type="MeshInstance3D" parent="scenery/boxes"]
+transform = Transform3D(-0.434076, 0.376398, -0.818476, 0.636205, 0.771326, 0.0173053, 0.637825, -0.513207, -0.574281, -99.6248, 4.05422, -77.1431)
+mesh = SubResource("BoxMesh_21ju6")
+skeleton = NodePath("../../..")
+surface_material_override/0 = ExtResource("6_u1h6e")
+
+[node name="spheres" type="Node3D" parent="scenery"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.0822, 0, 0)
+
+[node name="Sphere1" type="MeshInstance3D" parent="scenery/spheres"]
+transform = Transform3D(1, -5.96046e-08, -3.57628e-07, -1.49012e-08, 1, 1.04308e-07, 1.19209e-07, -5.96046e-08, 1, -134.465, 18.4207, -48.0399)
+mesh = SubResource("SphereMesh_0b3qk")
+skeleton = NodePath("../../..")
+surface_material_override/0 = ExtResource("4_3d1xh")
+
+[node name="Sphere2" type="MeshInstance3D" parent="scenery/spheres"]
+transform = Transform3D(1, -5.96046e-08, -3.57628e-07, -1.49012e-08, 1, 1.04308e-07, 1.19209e-07, -5.96046e-08, 1, -116.925, 8.32512, -48.0399)
+mesh = SubResource("SphereMesh_37lja")
+skeleton = NodePath("../../..")
+surface_material_override/0 = ExtResource("5_731fp")
+
+[node name="Sphere3" type="MeshInstance3D" parent="scenery/spheres"]
+transform = Transform3D(1, -5.96046e-08, -3.57628e-07, -1.49012e-08, 1, 1.04308e-07, 1.19209e-07, -5.96046e-08, 1, -103.868, 0.811209, -48.0399)
+mesh = SubResource("SphereMesh_un52x")
+skeleton = NodePath("../../..")
+surface_material_override/0 = ExtResource("6_u1h6e")
+
+[node name="Bottom" type="MeshInstance3D" parent="scenery"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.4921, -31.6516, 0)
+mesh = SubResource("PlaneMesh_x888m")
+skeleton = NodePath("")
+surface_material_override/0 = SubResource("ShaderMaterial_y71r8")

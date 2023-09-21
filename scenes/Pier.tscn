@@ -1,0 +1,158 @@
+[gd_scene load_steps=3 format=3 uid="uid://durvbjhil7ec1"]
+
+[ext_resource type="Material" uid="uid://d4kuxhbpjjs3s" path="res://standard_shaders/simple_wood.tres" id="1_qq51a"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_rf2q6"]
+
+[node name="Pier" type="Node3D"]
+
+[node name="Board" type="MeshInstance3D" parent="."]
+transform = Transform3D(20, 0, 0, 0, 0.2, 0, 0, 0, 2, 0, 0, 0)
+mesh = SubResource("BoxMesh_rf2q6")
+surface_material_override/0 = ExtResource("1_qq51a")
+
+[node name="columns" type="Node3D" parent="."]
+
+[node name="Column1" type="MeshInstance3D" parent="columns"]
+transform = Transform3D(0.2, 0, 0, 0, 20, 0, 0, 0, 0.2, 2.319, -9.75468, 0.834839)
+mesh = SubResource("BoxMesh_rf2q6")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("1_qq51a")
+
+[node name="Column2" type="MeshInstance3D" parent="columns"]
+transform = Transform3D(0.2, 0, 0, 0, 20, 0, 0, 0, 0.2, 2.319, -9.75468, -0.797735)
+mesh = SubResource("BoxMesh_rf2q6")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("1_qq51a")
+
+[node name="Column3" type="MeshInstance3D" parent="columns"]
+transform = Transform3D(0.2, 0, 0, 0, 20, 0, 0, 0, 0.2, 0.0185528, -9.75468, 0.834839)
+mesh = SubResource("BoxMesh_rf2q6")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("1_qq51a")
+
+[node name="Column4" type="MeshInstance3D" parent="columns"]
+transform = Transform3D(0.2, 0, 0, 0, 20, 0, 0, 0, 0.2, 0.0185528, -9.75468, -0.797735)
+mesh = SubResource("BoxMesh_rf2q6")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("1_qq51a")
+
+[node name="Column5" type="MeshInstance3D" parent="columns"]
+transform = Transform3D(0.2, 0, 0, 0, 20, 0, 0, 0, 0.2, -1.68823, -9.75468, 0.834839)
+mesh = SubResource("BoxMesh_rf2q6")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("1_qq51a")
+
+[node name="Column6" type="MeshInstance3D" parent="columns"]
+transform = Transform3D(0.2, 0, 0, 0, 20, 0, 0, 0, 0.2, -1.68823, -9.75468, -0.797735)
+mesh = SubResource("BoxMesh_rf2q6")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("1_qq51a")
+
+[node name="Column7" type="MeshInstance3D" parent="columns"]
+transform = Transform3D(0.2, 0, 0, 0, 20, 0, 0, 0, 0.2, 9.68414, -9.75468, 0.834839)
+mesh = SubResource("BoxMesh_rf2q6")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("1_qq51a")
+
+[node name="Column8" type="MeshInstance3D" parent="columns"]
+transform = Transform3D(0.2, 0, 0, 0, 20, 0, 0, 0, 0.2, 9.68414, -9.75468, -0.797735)
+mesh = SubResource("BoxMesh_rf2q6")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("1_qq51a")
+
+[node name="Column9" type="MeshInstance3D" parent="columns"]
+transform = Transform3D(0.2, 0, 0, 0, 20, 0, 0, 0, 0.2, 7.38369, -9.75468, 0.834839)
+mesh = SubResource("BoxMesh_rf2q6")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("1_qq51a")
+
+[node name="Column10" type="MeshInstance3D" parent="columns"]
+transform = Transform3D(0.2, 0, 0, 0, 20, 0, 0, 0, 0.2, 7.38369, -9.75468, -0.797735)
+mesh = SubResource("BoxMesh_rf2q6")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("1_qq51a")
+
+[node name="Column11" type="MeshInstance3D" parent="columns"]
+transform = Transform3D(0.2, 0, 0, 0, 20, 0, 0, 0, 0.2, 5.67691, -9.75468, 0.834839)
+mesh = SubResource("BoxMesh_rf2q6")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("1_qq51a")
+
+[node name="Column12" type="MeshInstance3D" parent="columns"]
+transform = Transform3D(0.2, 0, 0, 0, 20, 0, 0, 0, 0.2, 5.67691, -9.75468, -0.797735)
+mesh = SubResource("BoxMesh_rf2q6")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("1_qq51a")
+
+[node name="Column13" type="MeshInstance3D" parent="columns"]
+transform = Transform3D(0.2, 0, 0, 0, 20, 0, 0, 0, 0.2, 5.08325, -9.75468, 0.834839)
+mesh = SubResource("BoxMesh_rf2q6")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("1_qq51a")
+
+[node name="Column14" type="MeshInstance3D" parent="columns"]
+transform = Transform3D(0.2, 0, 0, 0, 20, 0, 0, 0, 0.2, 5.08325, -9.75468, -0.797735)
+mesh = SubResource("BoxMesh_rf2q6")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("1_qq51a")
+
+[node name="Column15" type="MeshInstance3D" parent="columns"]
+transform = Transform3D(0.2, 0, 0, 0, 20, 0, 0, 0, 0.2, 2.7828, -9.75468, 0.834839)
+mesh = SubResource("BoxMesh_rf2q6")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("1_qq51a")
+
+[node name="Column16" type="MeshInstance3D" parent="columns"]
+transform = Transform3D(0.2, 0, 0, 0, 20, 0, 0, 0, 0.2, 2.7828, -9.75468, -0.797735)
+mesh = SubResource("BoxMesh_rf2q6")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("1_qq51a")
+
+[node name="Column17" type="MeshInstance3D" parent="columns"]
+transform = Transform3D(0.2, 0, 0, 0, 20, 0, 0, 0, 0.2, 1.07602, -9.75468, 0.834839)
+mesh = SubResource("BoxMesh_rf2q6")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("1_qq51a")
+
+[node name="Column18" type="MeshInstance3D" parent="columns"]
+transform = Transform3D(0.2, 0, 0, 0, 20, 0, 0, 0, 0.2, 1.07602, -9.75468, -0.797735)
+mesh = SubResource("BoxMesh_rf2q6")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("1_qq51a")
+
+[node name="Column19" type="MeshInstance3D" parent="columns"]
+transform = Transform3D(0.2, 0, 0, 0, 20, 0, 0, 0, 0.2, -1.81878, -9.75468, 0.834839)
+mesh = SubResource("BoxMesh_rf2q6")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("1_qq51a")
+
+[node name="Column20" type="MeshInstance3D" parent="columns"]
+transform = Transform3D(0.2, 0, 0, 0, 20, 0, 0, 0, 0.2, -1.81878, -9.75468, -0.797735)
+mesh = SubResource("BoxMesh_rf2q6")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("1_qq51a")
+
+[node name="Column21" type="MeshInstance3D" parent="columns"]
+transform = Transform3D(0.2, 0, 0, 0, 20, 0, 0, 0, 0.2, -4.11923, -9.75468, 0.834839)
+mesh = SubResource("BoxMesh_rf2q6")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("1_qq51a")
+
+[node name="Column22" type="MeshInstance3D" parent="columns"]
+transform = Transform3D(0.2, 0, 0, 0, 20, 0, 0, 0, 0.2, -4.11923, -9.75468, -0.797735)
+mesh = SubResource("BoxMesh_rf2q6")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("1_qq51a")
+
+[node name="Column23" type="MeshInstance3D" parent="columns"]
+transform = Transform3D(0.2, 0, 0, 0, 20, 0, 0, 0, 0.2, -5.82601, -9.75468, 0.834839)
+mesh = SubResource("BoxMesh_rf2q6")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("1_qq51a")
+
+[node name="Column24" type="MeshInstance3D" parent="columns"]
+transform = Transform3D(0.2, 0, 0, 0, 20, 0, 0, 0, 0.2, -5.82601, -9.75468, -0.797735)
+mesh = SubResource("BoxMesh_rf2q6")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("1_qq51a")
