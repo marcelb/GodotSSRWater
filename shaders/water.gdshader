@@ -26,6 +26,8 @@ uniform float border_scale : hint_range(0.0, 5.0, 0.01) = 2.0;
 uniform float border_near = 0.5;
 uniform float border_far = 300.0;
 
+uniform float refraction_intensity : hint_range(0.0, 1.0, 0.01) = 0.4; 
+
 uniform float transparency : hint_range(0.0, 1.0, 0.01) = 0.4;
 uniform float max_visible_depth : hint_range(0.0, 100.0, 0.1) = 10.0;
 uniform vec3 color_deep : source_color = vec3(0.0, 0.1, 0.4);
@@ -68,6 +70,20 @@ bool is_within_screen_boundaries(vec2 position) {
 	return position.x > 0.0 && position.x < 1.0 && position.y > 0.0 && position.y < 1.0;
 }
 
+vec2 get_uv_from_view_position(vec3 position_view_space, mat4 proj_m)
+{
+	vec4 position_clip_space = proj_m * vec4(position_view_space.xyz, 1.0);
+	vec2 position_ndc = position_clip_space.xy / position_clip_space.w;
+	return position_ndc.xy * 0.5 + 0.5;
+}
+
+vec3 get_view_position_from_uv(vec2 uv, float depth, mat4 inv_proj_m)
+{
+	vec4 position_ndc = vec4((uv * 2.0) - 1.0, depth, 1.0);
+	vec4 view_position = inv_proj_m * position_ndc;
+	return view_position.xyz /= view_position.w;
+}
+
 vec3 get_ssr_color(vec3 surface_view_position, vec3 normal_view_space, vec3 view_view_space, mat4 proj_m, mat4 inv_proj_m)
 {
 	vec3 current_position_view_space = surface_view_position;
@@ -80,15 +96,10 @@ vec3 get_ssr_color(vec3 surface_view_position, vec3 normal_view_space, vec3 view
 	for(float travel=0.0; resulting_color.x < 0.0 && travel < ssr_max_travel; travel = travel + ssr_resolution)
 	{
 		current_position_view_space += reflect_vector_view_space * ssr_resolution;
-
-		vec4 current_position_clip_space = proj_m * vec4(current_position_view_space.xyz, 1.0);
-		vec2 current_position_ndc = current_position_clip_space.xy / current_position_clip_space.w;
-		current_screen_position = current_position_ndc.xy * 0.5 + 0.5;
+		current_screen_position = get_uv_from_view_position(current_position_view_space, proj_m);
 
 		float depth_texture_probe_raw = texture(DEPTH_TEXTURE, current_screen_position).x;
-		vec4 depth_texture_probe_normalized_device_coordinates = vec4((current_screen_position * 2.0) - 1.0, depth_texture_probe_raw, 1.0);
-		vec4 depth_texture_probe_view_position = inv_proj_m * depth_texture_probe_normalized_device_coordinates;
-		depth_texture_probe_view_position.xyz /= depth_texture_probe_view_position.w;
+		vec3 depth_texture_probe_view_position = get_view_position_from_uv(current_screen_position, depth_texture_probe_raw, inv_proj_m);
 		
 		float depth_diff = depth_texture_probe_view_position.z - current_position_view_space.z;
 		
@@ -107,20 +118,25 @@ float normalize_float(float min_v, float max_v, float value) {
 	return  (clamped_value - min_v) / (max_v - min_v);
 }
 
-vec3 get_view_position(vec2 screen_uv, float z_depth, mat4 inv_proj_m) {
-	vec4 normalized_device_coordinates = vec4((screen_uv * 2.0) - 1.0, z_depth, 1.0);
-	vec4 view_position = inv_proj_m * normalized_device_coordinates;
-	return view_position.xyz / view_position.w;
+vec2 get_refracted_uv(vec2 raw_screen_uv, float screen_depth_raw, vec3 view, vec3 normal, mat4 proj_m, mat4 inv_proj_m)
+{
+		vec3 screen_view_position_original = get_view_position_from_uv(raw_screen_uv, screen_depth_raw, inv_proj_m);
+		float screen_center_distance = clamp(abs(length(raw_screen_uv - vec2(0.5, 0.5))) * 2.0, 0.0, 1.0);
+		float refraction_intensity_deglitched = mix(1.0 - refraction_intensity, 1.0, screen_center_distance);
+		vec3 refraction_position_view_space = screen_view_position_original + normalize(refract(view, -normal, refraction_intensity_deglitched));
+		vec2 refraction_uv = get_uv_from_view_position(refraction_position_view_space, proj_m);
+		return refraction_uv;
 }
 
 void fragment() {
-	vec3 screen_color = texture(SCREEN_TEXTURE, SCREEN_UV).rgb;
-	float screen_depth = texture(DEPTH_TEXTURE, SCREEN_UV).x;
-	float surface_depth = FRAGCOORD.z;
-	vec3 screen_view_position 	= get_view_position(SCREEN_UV, screen_depth, INV_PROJECTION_MATRIX);
-	vec3 surface_view_position 	= get_view_position(SCREEN_UV, surface_depth, INV_PROJECTION_MATRIX);
+	float screen_depth_raw = texture(DEPTH_TEXTURE, SCREEN_UV).x;
 	
-	float border_diff = border(screen_depth) - border(surface_depth);
+	vec2 refraction_uv = refraction_intensity > 0.0 ? get_refracted_uv(SCREEN_UV, screen_depth_raw, VIEW, NORMAL, PROJECTION_MATRIX, INV_PROJECTION_MATRIX) : SCREEN_UV;
+	
+	float screen_depth = texture(DEPTH_TEXTURE, refraction_uv).x;
+	float surface_depth = FRAGCOORD.z;
+	
+	float border_diff = border(screen_depth_raw) - border(surface_depth);
 	
 	vec2 time_vector = (TIME * surface_texture_direction) * surface_texture_time_scale;
 	vec2 time_vector2 = (TIME * surface_texture_direction2) * surface_texture_time_scale;
@@ -128,11 +144,13 @@ void fragment() {
 	vec3 normal_texture_blend 	= mix(texture(texture_normal, vertex_uv * surface_texture_scale + time_vector).xyz, texture(texture_normal2, vertex_uv * surface_texture_scale + time_vector2).xyz, 0.5);
 	vec3 normal_blend 			= mix(NORMAL, normal_texture_blend, surface_texture_roughness);
 	
+	vec3 screen_view_position 	= get_view_position_from_uv(refraction_uv, screen_depth, INV_PROJECTION_MATRIX);
+	vec3 surface_view_position 	= get_view_position_from_uv(refraction_uv, surface_depth, INV_PROJECTION_MATRIX);
 	float depth_opacity = 1.0 - normalize_float(0.0, max_visible_depth, length(surface_view_position - screen_view_position));
 	
-	vec3 ssr_color = get_ssr_color(surface_view_position, NORMAL, VIEW, PROJECTION_MATRIX, INV_PROJECTION_MATRIX);
-
+	vec3 screen_color 				= texture(SCREEN_TEXTURE, refraction_uv).rgb;
 	vec3 surface_color 				= albedo;
+	vec3 ssr_color 					= get_ssr_color(surface_view_position, NORMAL, VIEW, PROJECTION_MATRIX, INV_PROJECTION_MATRIX);
 	vec3 color_with_transparency 	= mix(surface_color, screen_color, transparency);
 	vec3 depth_color 				= mix(color_deep.rgb, color_with_transparency, depth_opacity);
 	vec3 water_color 				= (ssr_color.x > 0.0) ? mix(depth_color, ssr_color, ssr_mix_strength) : depth_color;

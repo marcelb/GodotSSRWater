@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://ck1h771dply0g"]
+[gd_scene load_steps=34 format=3 uid="uid://ck1h771dply0g"]
 
 [ext_resource type="Script" path="res://scripts/Camera3D.gd" id="1_oowxb"]
 [ext_resource type="Shader" path="res://shaders/water.gdshader" id="2_6nog1"]
@@ -7,6 +7,7 @@
 [ext_resource type="Shader" path="res://shaders/bottom.gdshader" id="6_dtw72"]
 [ext_resource type="Material" uid="uid://khxhx4mnugb1" path="res://standard_shaders/yellow.tres" id="6_u1h6e"]
 [ext_resource type="PackedScene" uid="uid://durvbjhil7ec1" path="res://scenes/Pier.tscn" id="7_bj37i"]
+[ext_resource type="Texture2D" uid="uid://cmnmahdmhsq4h" path="res://assets/checker.png" id="8_56h6h"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_14kcx"]
 sky_top_color = Color(0.298039, 0.756863, 0.984314, 1)
@@ -91,6 +92,7 @@ shader_parameter/border_color = Color(1, 1, 1, 1)
 shader_parameter/border_scale = 2.0
 shader_parameter/border_near = 0.5
 shader_parameter/border_far = 300.0
+shader_parameter/refraction_intensity = 0.4
 shader_parameter/transparency = 0.4
 shader_parameter/max_visible_depth = 10.0
 shader_parameter/color_deep = Color(0, 0.1, 0.4, 1)
@@ -100,6 +102,13 @@ shader_parameter/wave1 = SubResource("NoiseTexture2D_ppy63")
 shader_parameter/wave2 = SubResource("NoiseTexture2D_qeaub")
 shader_parameter/texture_normal = SubResource("NoiseTexture2D_nakla")
 shader_parameter/texture_normal2 = SubResource("NoiseTexture2D_bxqt0")
+
+[sub_resource type="BoxMesh" id="BoxMesh_x3ff0"]
+size = Vector3(18, 0.1, 40)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rx107"]
+albedo_texture = ExtResource("8_56h6h")
+uv1_scale = Vector3(1.5, 3, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_21ju6"]
 size = Vector3(50, 1, 2)
@@ -168,6 +177,12 @@ mesh = SubResource("PlaneMesh_hnmyy")
 surface_material_override/0 = SubResource("ShaderMaterial_jsv1i")
 
 [node name="scenery" type="Node3D" parent="."]
+
+[node name="Chessboard" type="MeshInstance3D" parent="scenery"]
+transform = Transform3D(0.741616, -0.139773, 0.656101, -0.16291, 0.911247, 0.378272, -0.650742, -0.387418, 0.653025, -68.4752, -4.30671, -56.5773)
+mesh = SubResource("BoxMesh_x3ff0")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_rx107")
 
 [node name="Pier" parent="scenery" instance=ExtResource("7_bj37i")]
 transform = Transform3D(-1.99631, 0, 0.121435, 0, 2, 0, -0.121435, 0, -1.99631, -42.0222, 4.60747, -76.6392)

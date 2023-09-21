@@ -14,6 +14,7 @@ This is a full water shader implementation supporting:
 - 3D waves
 - Edge detection
 - Normal textures for a varied surface
+- Fake Refraction
 
 This respository includes the shader and a demo scene.
 
