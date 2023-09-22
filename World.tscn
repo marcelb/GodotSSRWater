@@ -1,6 +1,7 @@
-[gd_scene load_steps=34 format=3 uid="uid://ck1h771dply0g"]
+[gd_scene load_steps=35 format=3 uid="uid://ck1h771dply0g"]
 
 [ext_resource type="Script" path="res://scripts/Camera3D.gd" id="1_oowxb"]
+[ext_resource type="Script" path="res://World.gd" id="1_rau4y"]
 [ext_resource type="Shader" path="res://shaders/water.gdshader" id="2_6nog1"]
 [ext_resource type="Material" uid="uid://w0521xyotujb" path="res://standard_shaders/pink.tres" id="4_3d1xh"]
 [ext_resource type="Material" uid="uid://due1qpgfoidud" path="res://standard_shaders/green.tres" id="5_731fp"]
@@ -157,6 +158,7 @@ shader_parameter/stone_texture = SubResource("NoiseTexture2D_ko5xt")
 shader_parameter/bottom = SubResource("NoiseTexture2D_lawpj")
 
 [node name="World" type="Node3D"]
+script = ExtResource("1_rau4y")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_nbsfo")
@@ -233,3 +235,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.4921, -31.6516, 0)
 mesh = SubResource("PlaneMesh_x888m")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("ShaderMaterial_y71r8")
+
+[node name="CurrentFPS" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0

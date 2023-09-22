@@ -34,12 +34,23 @@ func _process(delta):
 		return
 		
 	var direction = Vector3(
-		float(Input.is_physical_key_pressed(KEY_D)) - float(Input.is_physical_key_pressed(KEY_A)),
-		float(Input.is_physical_key_pressed(KEY_E)) - float(Input.is_physical_key_pressed(KEY_Q)), 
-		float(Input.is_physical_key_pressed(KEY_S)) - float(Input.is_physical_key_pressed(KEY_W))
+		float(Input.is_action_pressed("right")) - float(Input.is_action_pressed("left")),
+		float(Input.is_action_pressed("down")) - float(Input.is_action_pressed("up")), 
+		float(Input.is_action_pressed("backward")) - float(Input.is_action_pressed("forward"))
 	).normalized()
 	
-	if Input.is_physical_key_pressed(KEY_SHIFT): # boost
+	if Input.is_action_pressed("boost"):
 		translate(direction * _velocity * delta * boost_speed_multiplier)
 	else:
 		translate(direction * _velocity * delta)
+		
+	var rotation_input = Vector2(
+		float(Input.is_action_pressed("rotate_down")) - float(Input.is_action_pressed("rotate_up")),
+		float(Input.is_action_pressed("rotate_right")) - float(Input.is_action_pressed("rotate_left"))
+	).normalized()
+	
+	if (rotation_input.length() > 0.0):
+		rotation.y -= rotation_input.y / 300 * sensitivity
+		rotation.x -= rotation_input.x / 300 * sensitivity
+		rotation.x = clamp(rotation.x, PI/-2, PI/2)
+	
