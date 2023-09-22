@@ -42,42 +42,44 @@ size = Vector2(320, 320)
 subdivide_width = 1000
 subdivide_depth = 1000
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_v1q6j"]
-noise_type = 3
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_8fje7"]
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_nakla"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ptjyb"]
 seamless = true
 as_normal_map = true
-bump_strength = 10.2
-noise = SubResource("FastNoiseLite_v1q6j")
+noise = SubResource("FastNoiseLite_8fje7")
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_d0odo"]
-fractal_type = 2
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_6i3b2"]
+noise_type = 0
+seed = 1
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_bxqt0"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_r4a3k"]
 seamless = true
 as_normal_map = true
-noise = SubResource("FastNoiseLite_d0odo")
+noise = SubResource("FastNoiseLite_6i3b2")
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_owqak"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_5edmb"]
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ppy63"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_qdptp"]
 seamless = true
-noise = SubResource("FastNoiseLite_owqak")
+noise = SubResource("FastNoiseLite_5edmb")
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_xtebi"]
-fractal_type = 2
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_vq7qh"]
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_qeaub"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_2unhc"]
 seamless = true
-noise = SubResource("FastNoiseLite_xtebi")
+bump_strength = 28.3
+noise = SubResource("FastNoiseLite_vq7qh")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_jsv1i"]
 render_priority = 0
 shader = ExtResource("2_6nog1")
 shader_parameter/albedo = Color(0.02, 0.45, 0.8, 1)
-shader_parameter/surface_texture_direction = Vector2(-1, 0)
-shader_parameter/surface_texture_direction2 = Vector2(0, 1)
+shader_parameter/transparency = 0.4
+shader_parameter/metallic = 0.0
+shader_parameter/roughness = 0.5
+shader_parameter/surface_normals_move_direction_a = Vector2(-1, 0)
+shader_parameter/surface_normals_move_direction_b = Vector2(0, 1)
 shader_parameter/surface_texture_roughness = 0.6
 shader_parameter/surface_texture_scale = 0.3
 shader_parameter/surface_texture_time_scale = 0.06
@@ -94,15 +96,12 @@ shader_parameter/border_scale = 2.0
 shader_parameter/border_near = 0.5
 shader_parameter/border_far = 300.0
 shader_parameter/refraction_intensity = 0.4
-shader_parameter/transparency = 0.4
 shader_parameter/max_visible_depth = 10.0
 shader_parameter/color_deep = Color(0, 0.1, 0.4, 1)
-shader_parameter/metallic = 0.0
-shader_parameter/roughness = 0.5
-shader_parameter/wave1 = SubResource("NoiseTexture2D_ppy63")
-shader_parameter/wave2 = SubResource("NoiseTexture2D_qeaub")
-shader_parameter/texture_normal = SubResource("NoiseTexture2D_nakla")
-shader_parameter/texture_normal2 = SubResource("NoiseTexture2D_bxqt0")
+shader_parameter/wave_a = SubResource("NoiseTexture2D_qdptp")
+shader_parameter/wave_b = SubResource("NoiseTexture2D_2unhc")
+shader_parameter/surface_normals_a = SubResource("NoiseTexture2D_ptjyb")
+shader_parameter/surface_normals_b = SubResource("NoiseTexture2D_r4a3k")
 
 [sub_resource type="BoxMesh" id="BoxMesh_x3ff0"]
 size = Vector3(18, 0.1, 40)

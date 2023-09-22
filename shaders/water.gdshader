@@ -4,9 +4,12 @@ uniform sampler2D SCREEN_TEXTURE : hint_screen_texture, filter_nearest;
 uniform sampler2D DEPTH_TEXTURE : hint_depth_texture, filter_nearest;
 
 uniform vec3 albedo : source_color = vec3(0.02, 0.45, 0.8);
+uniform float transparency : hint_range(0.0, 1.0, 0.01) = 0.4;
+uniform float metallic : hint_range(0.0, 1.0, 0.01) = 0;
+uniform float roughness : hint_range(0.0, 1.0, 0.01) = 0.5;
 
-uniform vec2 surface_texture_direction = vec2(-1.0, 0.0);
-uniform vec2 surface_texture_direction2 = vec2(0.0, 1.0);
+uniform vec2 surface_normals_move_direction_a = vec2(-1.0, 0.0);
+uniform vec2 surface_normals_move_direction_b = vec2(0.0, 1.0);
 uniform float surface_texture_roughness : hint_range(0.0, 1.0, 0.01) = 0.6;
 uniform float surface_texture_scale : hint_range(0.001, 2.0, 0.001) = 0.3;
 uniform float surface_texture_time_scale : hint_range(0.001, 2.0, 0.001) = 0.06;
@@ -28,25 +31,21 @@ uniform float border_far = 300.0;
 
 uniform float refraction_intensity : hint_range(0.0, 1.0, 0.01) = 0.4; 
 
-uniform float transparency : hint_range(0.0, 1.0, 0.01) = 0.4;
 uniform float max_visible_depth : hint_range(0.0, 100.0, 0.1) = 10.0;
 uniform vec3 color_deep : source_color = vec3(0.0, 0.1, 0.4);
 
-uniform float metallic : hint_range(0.0, 1.0, 0.01) = 0;
-uniform float roughness : hint_range(0.0, 1.0, 0.01) = 0.5;
+uniform sampler2D wave_a;
+uniform sampler2D wave_b;
 
-uniform sampler2D wave1;
-uniform sampler2D wave2;
-
-uniform sampler2D texture_normal;
-uniform sampler2D texture_normal2;
+uniform sampler2D surface_normals_a;
+uniform sampler2D surface_normals_b;
 
 varying vec2 vertex_uv; 
 
 float get_wave_height(vec2 uv)
 {
-	float height1 = texture(wave1, uv).r;
-	float height2 = texture(wave2, -uv * vec2(-1.0, -1.0)).r;
+	float height1 = texture(wave_a, uv).r;
+	float height2 = texture(wave_b, -uv * vec2(-1.0, -1.0)).r;
 	return (height1 + height2 * 2.0) / 2.0;
 }
 
@@ -138,10 +137,10 @@ void fragment() {
 	
 	float border_diff = border(screen_depth_raw) - border(surface_depth);
 	
-	vec2 time_vector = (TIME * surface_texture_direction) * surface_texture_time_scale;
-	vec2 time_vector2 = (TIME * surface_texture_direction2) * surface_texture_time_scale;
+	vec2 time_vector = (TIME * surface_normals_move_direction_a) * surface_texture_time_scale;
+	vec2 time_vector2 = (TIME * surface_normals_move_direction_b) * surface_texture_time_scale;
 	
-	vec3 normal_texture_blend 	= mix(texture(texture_normal, vertex_uv * surface_texture_scale + time_vector).xyz, texture(texture_normal2, vertex_uv * surface_texture_scale + time_vector2).xyz, 0.5);
+	vec3 normal_texture_blend 	= mix(texture(surface_normals_a, vertex_uv * surface_texture_scale + time_vector).xyz, texture(surface_normals_b, vertex_uv * surface_texture_scale + time_vector2).xyz, 0.5);
 	vec3 normal_blend 			= mix(NORMAL, normal_texture_blend, surface_texture_roughness);
 	
 	vec3 screen_view_position 	= get_view_position_from_uv(refraction_uv, screen_depth, INV_PROJECTION_MATRIX);
