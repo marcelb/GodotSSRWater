@@ -1,5 +1,4 @@
 # Godot SSR Water
-(c) Marcel Bankmann 2023 - present
 
 ![Demo Scene Screenshot](screenshot.png)
 
@@ -28,3 +27,8 @@ Use the shader settings to both change look and performance of the shader.
 
 Especially the SSR settings have great impact on the shaders performance. In many cases low quality settings might be more than enough (low value distance, high value resolution).
 
+## Performance
+
+Should run well in most cases. I’ve tested it at 60fps on the Steam Deck without any lowering of the SSR resolution or any other optimizing and the demo is out of the box rock steady at 60fps at 50% GPU with 2.3 watts.
+
+(c) Marcel Bankmann 2023 - present
