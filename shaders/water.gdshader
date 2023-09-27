@@ -44,9 +44,9 @@ varying vec2 vertex_uv;
 
 float get_wave_height(vec2 uv)
 {
-	float height1 = texture(wave_a, uv).r;
-	float height2 = texture(wave_b, -uv * vec2(-1.0, -1.0)).r;
-	return (height1 + height2 * 2.0) / 2.0;
+	float height1 = texture(wave_a, uv).y;
+	float height2 = texture(wave_b, uv).y;
+	return (height1 + height2) / 2.0;
 }
 
 void vertex()
@@ -152,7 +152,7 @@ void fragment() {
 	vec3 ssr_color 					= get_ssr_color(surface_view_position, NORMAL, VIEW, PROJECTION_MATRIX, INV_PROJECTION_MATRIX);
 	vec3 color_with_transparency 	= mix(surface_color, screen_color, transparency);
 	vec3 depth_color 				= mix(color_deep.rgb, color_with_transparency, depth_opacity);
-	vec3 water_color 				= (ssr_color.x > 0.0) ? mix(depth_color, ssr_color, ssr_mix_strength) : depth_color;
+	vec3 water_color 				= (ssr_color.x >= 0.0) ? mix(depth_color, ssr_color, ssr_mix_strength) : depth_color;
 	vec3 final_color				= mix(border_color, water_color, step(border_scale, border_diff));
 	
 	ALBEDO.rgb = final_color;
