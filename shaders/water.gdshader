@@ -14,8 +14,8 @@ uniform float surface_texture_roughness : hint_range(0.0, 1.0, 0.01) = 0.6;
 uniform float surface_texture_scale : hint_range(0.001, 2.0, 0.001) = 0.3;
 uniform float surface_texture_time_scale : hint_range(0.001, 2.0, 0.001) = 0.06;
 
-uniform float ssr_resolution   : hint_range(0.1, 10.0, 0.1)		= 2.0;
-uniform float ssr_max_travel   : hint_range(0.1, 200.0, 0.1) 	= 30.0;
+uniform float ssr_resolution   : hint_range(0.01, 10.0, 0.1)	= 2.0;
+uniform float ssr_max_travel   : hint_range(0.0, 200.0, 0.1) 	= 30.0;
 uniform float ssr_max_diff     : hint_range(0.1, 10.0, 0.1) 	= 4.0;
 uniform float ssr_mix_strength : hint_range(0.0, 1.0, 0.01) 	= 0.7;
 
