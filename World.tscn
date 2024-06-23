@@ -1,9 +1,10 @@
-[gd_scene load_steps=35 format=3 uid="uid://ck1h771dply0g"]
+[gd_scene load_steps=37 format=3 uid="uid://ck1h771dply0g"]
 
 [ext_resource type="Script" path="res://scripts/Camera3D.gd" id="1_oowxb"]
 [ext_resource type="Script" path="res://World.gd" id="1_rau4y"]
 [ext_resource type="Shader" path="res://shaders/water.gdshader" id="2_6nog1"]
 [ext_resource type="Material" uid="uid://w0521xyotujb" path="res://standard_shaders/pink.tres" id="4_3d1xh"]
+[ext_resource type="Script" path="res://FogVolume.gd" id="4_lu0ui"]
 [ext_resource type="Material" uid="uid://due1qpgfoidud" path="res://standard_shaders/green.tres" id="5_731fp"]
 [ext_resource type="Shader" path="res://shaders/bottom.gdshader" id="6_dtw72"]
 [ext_resource type="Material" uid="uid://khxhx4mnugb1" path="res://standard_shaders/yellow.tres" id="6_u1h6e"]
@@ -32,10 +33,10 @@ fog_light_color = Color(0.0588235, 0.552941, 0.976471, 1)
 fog_light_energy = 0.51
 fog_density = 0.0
 fog_sky_affect = 0.0
-volumetric_fog_density = 0.0038
-volumetric_fog_albedo = Color(0.556863, 0.854902, 1, 1)
-volumetric_fog_anisotropy = 0.29
-volumetric_fog_length = 494.61
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.0
+volumetric_fog_length = 500.0
+volumetric_fog_sky_affect = 0.0
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_hnmyy"]
 size = Vector2(320, 320)
@@ -74,9 +75,9 @@ noise = SubResource("FastNoiseLite_tf0ow")
 render_priority = 0
 shader = ExtResource("2_6nog1")
 shader_parameter/albedo = Color(0.02, 0.45, 0.8, 1)
-shader_parameter/transparency = 0.4
-shader_parameter/metallic = 0.0
-shader_parameter/roughness = 0.0
+shader_parameter/transparency = 0.6
+shader_parameter/metallic = 0.45
+shader_parameter/roughness = 0.05
 shader_parameter/surface_normals_move_direction_a = Vector2(-1, 0)
 shader_parameter/surface_normals_move_direction_b = Vector2(0, 1)
 shader_parameter/surface_texture_roughness = 0.6
@@ -87,9 +88,9 @@ shader_parameter/ssr_max_travel = 30.0
 shader_parameter/ssr_max_diff = 4.0
 shader_parameter/ssr_mix_strength = 0.7
 shader_parameter/wave_noise_scale = 15.0
-shader_parameter/wave_height_scale = 0.25
+shader_parameter/wave_height_scale = 0.4
 shader_parameter/wave_time_scale = 0.025
-shader_parameter/wave_normal_flatness = 30.0
+shader_parameter/wave_normal_flatness = 16.0
 shader_parameter/border_color = Color(1, 1, 1, 1)
 shader_parameter/border_scale = 2.0
 shader_parameter/border_near = 0.5
@@ -101,6 +102,12 @@ shader_parameter/wave_a = SubResource("NoiseTexture2D_qdptp")
 shader_parameter/wave_b = SubResource("NoiseTexture2D_w84gw")
 shader_parameter/surface_normals_a = SubResource("NoiseTexture2D_bcpi7")
 shader_parameter/surface_normals_b = SubResource("NoiseTexture2D_r4a3k")
+
+[sub_resource type="FogMaterial" id="FogMaterial_vcxox"]
+density = 0.2
+albedo = Color(0.0196078, 0.447059, 0.8, 1)
+height_falloff = 100.0
+edge_fade = 0.0517
 
 [sub_resource type="BoxMesh" id="BoxMesh_x3ff0"]
 size = Vector3(18, 0.1, 40)
@@ -175,6 +182,12 @@ script = ExtResource("1_oowxb")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0266228, 0.112858, -0.0368958)
 mesh = SubResource("PlaneMesh_hnmyy")
 surface_material_override/0 = SubResource("ShaderMaterial_jsv1i")
+
+[node name="FogVolume" type="FogVolume" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.205, 0)
+shape = 4
+material = SubResource("FogMaterial_vcxox")
+script = ExtResource("4_lu0ui")
 
 [node name="scenery" type="Node3D" parent="."]
 

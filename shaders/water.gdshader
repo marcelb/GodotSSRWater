@@ -1,12 +1,13 @@
 shader_type spatial;
+render_mode cull_disabled;
 
 uniform sampler2D SCREEN_TEXTURE : hint_screen_texture, filter_nearest;
 uniform sampler2D DEPTH_TEXTURE : hint_depth_texture, filter_nearest;
 
 uniform vec3 albedo : source_color = vec3(0.02, 0.45, 0.8);
-uniform float transparency : hint_range(0.0, 1.0, 0.01) = 0.4;
-uniform float metallic : hint_range(0.0, 1.0, 0.01) = 0;
-uniform float roughness : hint_range(0.0, 1.0, 0.01) = 0.5;
+uniform float transparency : hint_range(0.0, 1.0, 0.01) = 0.6;
+uniform float metallic : hint_range(0.0, 1.0, 0.01) = 0.45;
+uniform float roughness : hint_range(0.0, 1.0, 0.01) = 0.05;
 
 uniform vec2 surface_normals_move_direction_a = vec2(-1.0, 0.0);
 uniform vec2 surface_normals_move_direction_b = vec2(0.0, 1.0);
@@ -20,9 +21,9 @@ uniform float ssr_max_diff     : hint_range(0.1, 10.0, 0.1) 	= 4.0;
 uniform float ssr_mix_strength : hint_range(0.0, 1.0, 0.01) 	= 0.7;
 
 uniform float wave_noise_scale = 15.0;
-uniform float wave_height_scale = 0.25;
+uniform float wave_height_scale = 0.4;
 uniform float wave_time_scale = 0.025;
-uniform float wave_normal_flatness : hint_range(0.1, 100.0, 0.1) = 30.0;
+uniform float wave_normal_flatness : hint_range(0.1, 100.0, 0.1) = 16.0;
 
 uniform vec3  border_color : source_color = vec3(1.0);
 uniform float border_scale : hint_range(0.0, 5.0, 0.01) = 2.0;
