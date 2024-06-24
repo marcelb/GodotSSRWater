@@ -85,6 +85,13 @@ vec3 get_view_position_from_uv(vec2 uv, float depth, mat4 inv_proj_m)
 	return view_position.xyz /= view_position.w;
 }
 
+float get_edge_smoothness(vec2 screen_position)
+{
+	vec2 shifted_screen_position = screen_position * (1.0 - screen_position);
+	float alpha = clamp(shifted_screen_position.x * shifted_screen_position.y * 16.0 * (1.0 + ssr_edge_sharpness),0.0,1.0);
+	return alpha;
+}
+
 vec4 get_ssr_color(vec3 surface_view_position, vec3 normal_view_space, vec3 view_view_space, mat4 proj_m, mat4 inv_proj_m)
 {
 	vec3 current_position_view_space = surface_view_position;
@@ -106,9 +113,9 @@ vec4 get_ssr_color(vec3 surface_view_position, vec3 normal_view_space, vec3 view
 		
 		resulting_color = (is_within_screen_boundaries(current_screen_position) && depth_diff >= 0.0 && depth_diff < ssr_max_diff) ? texture(SCREEN_TEXTURE, current_screen_position.xy).rgb : vec3(-1.0);
 	}
-	current_screen_position *= 1.0 - current_screen_position;
-	float resulting_alpha = clamp(current_screen_position.x * current_screen_position.y * 16.0 * (1.0 + ssr_edge_sharpness),0.0,1.0);
-	return vec4(resulting_color,resulting_alpha);
+
+	float alpha = get_edge_smoothness(current_screen_position);
+	return vec4(resulting_color,alpha);
 }
 
 float border(float cur_depth)
