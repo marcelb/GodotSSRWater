@@ -19,7 +19,7 @@ uniform float ssr_resolution   : hint_range(0.01, 10.0, 0.1)	= 2.0;
 uniform float ssr_max_travel   : hint_range(0.0, 200.0, 0.1) 	= 30.0;
 uniform float ssr_max_diff     : hint_range(0.1, 10.0, 0.1) 	= 4.0;
 uniform float ssr_mix_strength : hint_range(0.0, 1.0, 0.01) 	= 0.7;
-uniform float ssr_edge_smoothing: hint_range(0.0, 1.0, 0.1)	= 0.0;
+uniform float ssr_screen_border_fadeout: hint_range(0.0, 1.0, 0.1)	= 0.0;
 
 uniform float wave_noise_scale = 15.0;
 uniform float wave_height_scale = 0.4;
@@ -85,10 +85,10 @@ vec3 get_view_position_from_uv(vec2 uv, float depth, mat4 inv_proj_m)
 	return view_position.xyz /= view_position.w;
 }
 
-float get_edge_smoothness(vec2 screen_position)
+float get_screen_border_alpha(vec2 screen_position)
 {
     vec2 shifted_screen_position = ((2.0 * screen_position) - 1.0);
-    float alpha = clamp(1.0 - (shifted_screen_position.x * shifted_screen_position.x + shifted_screen_position.y * shifted_screen_position.y) * ssr_edge_smoothing, 0.0, 1.0);
+    float alpha = clamp(1.0 - (shifted_screen_position.x * shifted_screen_position.x + shifted_screen_position.y * shifted_screen_position.y) * ssr_screen_border_fadeout, 0.0, 1.0);
 
 	return alpha;
 }
@@ -115,7 +115,7 @@ vec4 get_ssr_color(vec3 surface_view_position, vec3 normal_view_space, vec3 view
 		resulting_color = (is_within_screen_boundaries(current_screen_position) && depth_diff >= 0.0 && depth_diff < ssr_max_diff) ? texture(SCREEN_TEXTURE, current_screen_position.xy).rgb : vec3(-1.0);
 	}
 
-	float alpha = get_edge_smoothness(current_screen_position);
+	float alpha = get_screen_border_alpha(current_screen_position);
 	return vec4(resulting_color,alpha);
 }
 
