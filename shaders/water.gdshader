@@ -139,7 +139,7 @@ vec4 get_ssr_color(vec3 surface_view_position, vec3 normal_view_space, vec3 view
 
 float linear_depth(float cur_depth)
 {
-	return border_near * border_far / (border_far + (2.0 * cur_depth - 1.0) * (border_near - border_far));
+    return border_far * border_near / (border_near + cur_depth * (border_far - border_near));
 }
 
 float normalize_float(float min_v, float max_v, float value) {

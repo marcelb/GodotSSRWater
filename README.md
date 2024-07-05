@@ -21,7 +21,7 @@ The SSR part of the shader is done in a function of its own, so it should be pos
 
 ## Godot Version
 
-Godot 4.2.X (the shader code itself should generally run on all Godot versions 4.0 - 4.2)
+Godot 4.3.X (the shader code itself should generally run on all Godot versions 4.3+)
 
 ## Usage
 
