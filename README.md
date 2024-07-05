@@ -1,10 +1,10 @@
-# Godot SSR Water
+# Godot SSR Water 
 
 ![Demo Scene Screenshot](screenshot.png)
 
 ## What is this about?
 
-This intends to solve the problem that the SSR (Screen Space Reflection) implementation of Godot 4.1 is limited to surfaces that are not transparent. For a water shader it is often necessary to support both transparency and reflections. In a lot of cases this can be worked around with reflection probes, but the need for SSR stands, especially because SSR works quiet well for water. The only solution is to write a custom SSR shader for that matter.
+This intends to solve the problem that the SSR (Screen Space Reflection) implementation of Godot 4.X is limited to surfaces that are not transparent. For a water shader it is often necessary to support both transparency and reflections. In a lot of cases this can be worked around with reflection probes, but the need for SSR stands, especially because SSR works quiet well for water. The only solution is to write a custom SSR shader for that matter.
 
 This is a full water shader implementation supporting:
 
@@ -19,9 +19,13 @@ This respository includes the shader and a demo scene.
 
 The SSR part of the shader is done in a function of its own, so it should be possible to use the SSR functionality separately.
 
+## Godot Version
+
+Godot 4.2.X (the shader code itself should generally run on all Godot versions 4.0 - 4.2)
+
 ## Usage
 
-Load the project in Godot 4.1 (or possibly later) and hit "Run".
+Load the project in Godot and hit "Run".
 
 Use the shader settings to both change look and performance of the shader. 
 
