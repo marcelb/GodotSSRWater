@@ -52,10 +52,10 @@ Especially the SSR settings have great impact on the shaders performance. In man
 | Wave Height Scale                  | The y-height of waves interpreted from the wave textures. |
 | Wave Time Scale                    | The waves speed. |
 | Wave Normal Flatness               | The flatness of the new calculated normals. Higher values are smoother. |
-| Border Color                       | The border detection color. This is the foam around objects in the water. |
-| Border Scale                       | The size of the border. |
-| Border Near                        | Distance when the border stops shrinking. |
-| Border Far                         | Distance when the border starts growing. |
+| Border Color                       | The coastal border color. This is the foam around objects in the water. |
+| Border Scale                       | The size of the coastal border. |
+| Border Near                        | Near plane for linear depth calculation for coastal borders. Good values improve the precision. Should be < Border Far. (Default: 0.5) |
+| Border Far                         | Far plane for linear depth calculation for coastal borders. Good values improve the precision depending on your scene scale. Should be > Border Near. (Default: 300.0) |
 | Refraction Intensity               | The intensity of the refraction effect. 0 is no refraction at all. |
 | Max Visible Depth                  | The max depth that will be visible from the surface. After that it gets opaque. |
 | Color Deep                         | The opaque color of depths not visible. |

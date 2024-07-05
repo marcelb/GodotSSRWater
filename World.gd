@@ -5,5 +5,5 @@ extends Node3D
 func _ready():
 	Engine.max_fps = 60
 
-func _process(delta):
+func _process(_delta):
 	CurrentFPS.text = str(Engine.get_frames_per_second()) + "/" + str(Engine.max_fps)

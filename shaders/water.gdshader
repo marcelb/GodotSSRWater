@@ -108,7 +108,7 @@ vec3 get_ssr_color(vec3 surface_view_position, vec3 normal_view_space, vec3 view
 	return resulting_color;
 }
 
-float border(float cur_depth)
+float linear_depth(float cur_depth)
 {
 	return border_near * border_far / (border_far + (2.0 * cur_depth - 1.0) * (border_near - border_far));
 }
@@ -136,7 +136,7 @@ void fragment() {
 	float screen_depth = texture(DEPTH_TEXTURE, refraction_uv).x;
 	float surface_depth = FRAGCOORD.z;
 	
-	float border_diff = border(screen_depth_raw) - border(surface_depth);
+	float border_diff = linear_depth(screen_depth_raw) - linear_depth(surface_depth);
 	
 	vec2 time_vector = (TIME * surface_normals_move_direction_a) * surface_texture_time_scale;
 	vec2 time_vector2 = (TIME * surface_normals_move_direction_b) * surface_texture_time_scale;
