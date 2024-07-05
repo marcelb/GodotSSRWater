@@ -15,7 +15,7 @@ This is a full water shader implementation supporting:
 - Normal textures for a varied surface
 - Fake Refraction
 
-This respository includes the shader and a demo scene.
+This repository includes the shader and a demo scene.
 
 The SSR part of the shader is done in a function of its own, so it should be possible to use the SSR functionality separately.
 
