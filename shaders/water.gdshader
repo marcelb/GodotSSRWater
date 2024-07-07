@@ -87,8 +87,15 @@ vec3 get_view_position_from_uv(vec2 uv, float depth, mat4 inv_proj_m)
 
 float get_screen_border_alpha(vec2 screen_position)
 {
-    vec2 shifted_screen_position = ((2.0 * screen_position) - 1.0);
-    float alpha = clamp(1.0 - (shifted_screen_position.x * shifted_screen_position.x + shifted_screen_position.y * shifted_screen_position.y) * ssr_screen_border_fadeout, 0.0, 1.0);
+    vec2 shifted_screen_position = 4.0 * screen_position * (1.0 - screen_position);
+	float mask = shifted_screen_position.x * shifted_screen_position.y; // ranging from 0.0 at the edges to 1.0 in the center 
+
+	// An offset in the [0.0, 0.5] range for ssr_screen_border_fadeout values > 0.75
+	// which is subtracted from the result of smoothstep.
+	// This ensure alpha smoothly transitions to zero when ssr_screen_border_fadeout is approaching 1.0.	
+	float offset = mix(0.0, 0.5, (clamp(ssr_screen_border_fadeout, 0.75, 1.0)-0.75) / 0.25);
+ 
+	float alpha = smoothstep(0.0, 2.0 * ssr_screen_border_fadeout, mask) - offset;
 
 	return alpha;
 }
