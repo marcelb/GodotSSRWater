@@ -95,7 +95,7 @@ float get_screen_border_alpha(vec2 screen_position)
 	// This ensure alpha smoothly transitions to zero when ssr_screen_border_fadeout is approaching 1.0.	
 	float offset = mix(0.0, 0.5, (clamp(ssr_screen_border_fadeout, 0.75, 1.0)-0.75) / 0.25);
  
-	float alpha = smoothstep(0.0, 2.0 * ssr_screen_border_fadeout, mask) - offset;
+	float alpha = clamp(smoothstep(0.0, 2.0 * ssr_screen_border_fadeout, mask) - offset, 0.0, 1.0);
 
 	return alpha;
 }
