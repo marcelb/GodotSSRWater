@@ -87,6 +87,11 @@ vec3 get_view_position_from_uv(vec2 uv, float depth, mat4 inv_proj_m)
 
 float get_screen_border_alpha(vec2 screen_position)
 {
+
+	if (ssr_screen_border_fadeout == 0.0) {
+		return 1.0;
+	}
+
     vec2 shifted_screen_position = 4.0 * screen_position * (1.0 - screen_position);
 	float mask = shifted_screen_position.x * shifted_screen_position.y; // ranging from 0.0 at the edges to 1.0 in the center 
 
