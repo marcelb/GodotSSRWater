@@ -48,6 +48,7 @@ Especially the SSR settings have great impact on the shaders performance. In man
 | SSR Max Travel                     | The maximum distance the ray will travel before giving up. Longer is better but slower. |
 | SSR Max Diff                       | The maximum diff from geometry that is counted as a ray-march hit. No performance impact. Low values might miss geometry, high values might create false positives. Aim for good looks. |
 | SSR Mix Strength                   | How visible the reflections are on the surface of the water. |
+| SSR Screen Border Fadeout          | Strength of fade-out effect on reflections close to the screen borders |
 | Wave Noise Scale                   | Scale of the 3D waves interpretation. Higher means wider waves. |
 | Wave Height Scale                  | The y-height of waves interpreted from the wave textures. |
 | Wave Time Scale                    | The waves speed. |
