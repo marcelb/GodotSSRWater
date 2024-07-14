@@ -19,6 +19,7 @@ uniform float ssr_resolution   : hint_range(0.01, 10.0, 0.1)	= 2.0;
 uniform float ssr_max_travel   : hint_range(0.0, 200.0, 0.1) 	= 30.0;
 uniform float ssr_max_diff     : hint_range(0.1, 10.0, 0.1) 	= 4.0;
 uniform float ssr_mix_strength : hint_range(0.0, 1.0, 0.01) 	= 0.7;
+uniform float ssr_screen_border_fadeout: hint_range(0.0, 1.0, 0.1)	= 0.3;
 
 uniform float wave_noise_scale = 15.0;
 uniform float wave_height_scale = 0.4;
@@ -84,7 +85,27 @@ vec3 get_view_position_from_uv(vec2 uv, float depth, mat4 inv_proj_m)
 	return view_position.xyz /= view_position.w;
 }
 
-vec3 get_ssr_color(vec3 surface_view_position, vec3 normal_view_space, vec3 view_view_space, mat4 proj_m, mat4 inv_proj_m)
+float get_screen_border_alpha(vec2 screen_position)
+{
+
+	if (ssr_screen_border_fadeout == 0.0) {
+		return 1.0;
+	}
+
+    vec2 shifted_screen_position = 4.0 * screen_position * (1.0 - screen_position);
+	float mask = shifted_screen_position.x * shifted_screen_position.y; // ranging from 0.0 at the edges to 1.0 in the center 
+
+	// An offset in the [0.0, 0.5] range for ssr_screen_border_fadeout values > 0.75
+	// which is subtracted from the result of smoothstep.
+	// This ensure alpha smoothly transitions to zero when ssr_screen_border_fadeout is approaching 1.0.	
+	float offset = mix(0.0, 0.5, (clamp(ssr_screen_border_fadeout, 0.75, 1.0)-0.75) / 0.25);
+ 
+	float alpha = clamp(smoothstep(0.0, 2.0 * ssr_screen_border_fadeout, mask) - offset, 0.0, 1.0);
+
+	return alpha;
+}
+
+vec4 get_ssr_color(vec3 surface_view_position, vec3 normal_view_space, vec3 view_view_space, mat4 proj_m, mat4 inv_proj_m)
 {
 	vec3 current_position_view_space = surface_view_position;
 	vec3 view_direction_view_space = view_view_space * -1.0;
@@ -105,7 +126,9 @@ vec3 get_ssr_color(vec3 surface_view_position, vec3 normal_view_space, vec3 view
 		
 		resulting_color = (is_within_screen_boundaries(current_screen_position) && depth_diff >= 0.0 && depth_diff < ssr_max_diff) ? texture(SCREEN_TEXTURE, current_screen_position.xy).rgb : vec3(-1.0);
 	}
-	return resulting_color;
+
+	float alpha = get_screen_border_alpha(current_screen_position);
+	return vec4(resulting_color,alpha);
 }
 
 float linear_depth(float cur_depth)
@@ -150,10 +173,10 @@ void fragment() {
 	
 	vec3 screen_color 				= texture(SCREEN_TEXTURE, refraction_uv).rgb;
 	vec3 surface_color 				= albedo;
-	vec3 ssr_color 					= get_ssr_color(surface_view_position, NORMAL, VIEW, PROJECTION_MATRIX, INV_PROJECTION_MATRIX);
+	vec4 ssr_color 					= get_ssr_color(surface_view_position, NORMAL, VIEW, PROJECTION_MATRIX, INV_PROJECTION_MATRIX);
 	vec3 color_with_transparency 	= mix(surface_color, screen_color, transparency);
 	vec3 depth_color 				= mix(color_deep.rgb, color_with_transparency, depth_opacity);
-	vec3 water_color 				= (ssr_color.x >= 0.0) ? mix(depth_color, ssr_color, ssr_mix_strength) : depth_color;
+	vec3 water_color 				= (ssr_color.x >= 0.0) ? mix(depth_color, ssr_color.rgb, ssr_mix_strength * ssr_color.a) : depth_color;
 	vec3 final_color				= mix(border_color, water_color, step(border_scale, border_diff));
 	
 	ALBEDO.rgb = final_color;
