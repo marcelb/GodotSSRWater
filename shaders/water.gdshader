@@ -1,6 +1,8 @@
 shader_type spatial;
 render_mode cull_disabled;
 
+const float EPSILON = 1e-5;
+
 uniform sampler2D SCREEN_TEXTURE : hint_screen_texture, filter_nearest;
 uniform sampler2D DEPTH_TEXTURE : hint_depth_texture, filter_nearest;
 
@@ -85,10 +87,14 @@ vec3 get_view_position_from_uv(vec2 uv, float depth, mat4 inv_proj_m)
 	return view_position.xyz /= view_position.w;
 }
 
+bool is_zero(float value) {
+    return abs(value) < EPSILON;
+}
+
 float get_screen_border_alpha(vec2 screen_position)
 {
 
-	if (ssr_screen_border_fadeout == 0.0) {
+	if (is_zero(ssr_screen_border_fadeout)) {
 		return 1.0;
 	}
 
