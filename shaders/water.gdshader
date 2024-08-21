@@ -162,10 +162,10 @@ void fragment() {
 	
 	vec2 refraction_uv = refraction_intensity > 0.0 ? get_refracted_uv(SCREEN_UV, screen_depth_raw, VIEW, NORMAL, PROJECTION_MATRIX, INV_PROJECTION_MATRIX) : SCREEN_UV;
 	
-	float screen_depth = texture(DEPTH_TEXTURE, refraction_uv).x;
+	float screen_depth = 1.0 - texture(DEPTH_TEXTURE, refraction_uv).x;  // Adjust for Reverse Z
 	float surface_depth = FRAGCOORD.z;
 	
-	float border_diff = linear_depth(screen_depth_raw) - linear_depth(surface_depth);
+	float border_diff = linear_depth(1.0 - screen_depth_raw) - linear_depth(1.0 - surface_depth);  // Adjust depth values for Reverse Z
 	
 	vec2 time_vector = (TIME * surface_normals_move_direction_a) * surface_texture_time_scale;
 	vec2 time_vector2 = (TIME * surface_normals_move_direction_b) * surface_texture_time_scale;
