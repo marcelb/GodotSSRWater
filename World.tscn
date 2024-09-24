@@ -44,6 +44,7 @@ subdivide_width = 400
 subdivide_depth = 400
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_d0y3h"]
+frequency = 0.0043
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_bcpi7"]
 seamless = true
@@ -57,9 +58,11 @@ seed = 1
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_r4a3k"]
 seamless = true
 as_normal_map = true
+bump_strength = 1.0
 noise = SubResource("FastNoiseLite_6i3b2")
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_5edmb"]
+frequency = 0.0111
 fractal_type = 2
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_qdptp"]
@@ -78,6 +81,16 @@ shader_parameter/albedo = Color(0.02, 0.45, 0.8, 1)
 shader_parameter/transparency = 0.6
 shader_parameter/metallic = 0.45
 shader_parameter/roughness = 0.05
+shader_parameter/max_visible_depth = 10.0
+shader_parameter/color_deep = Color(0, 0.1, 0.4, 1)
+shader_parameter/wave_move_direction_a = Vector2(-1, 0)
+shader_parameter/wave_move_direction_b = Vector2(0, 1)
+shader_parameter/wave_noise_scale_a = 15.0
+shader_parameter/wave_noise_scale_b = 15.0
+shader_parameter/wave_time_scale_a = 0.025
+shader_parameter/wave_time_scale_b = 0.025
+shader_parameter/wave_height_scale = 0.4
+shader_parameter/wave_normal_flatness = 16.0
 shader_parameter/surface_normals_move_direction_a = Vector2(-1, 0)
 shader_parameter/surface_normals_move_direction_b = Vector2(0, 1)
 shader_parameter/surface_texture_roughness = 0.6
@@ -88,17 +101,15 @@ shader_parameter/ssr_max_travel = 30.0
 shader_parameter/ssr_max_diff = 4.0
 shader_parameter/ssr_mix_strength = 0.7
 shader_parameter/ssr_screen_border_fadeout = 0.3
-shader_parameter/wave_noise_scale = 15.0
-shader_parameter/wave_height_scale = 0.4
-shader_parameter/wave_time_scale = 0.025
-shader_parameter/wave_normal_flatness = 16.0
+shader_parameter/ssr_samples = 2
+shader_parameter/ssr_sample_radius = 0.2
+shader_parameter/refraction_intensity = 0.4
 shader_parameter/border_color = Color(1, 1, 1, 1)
 shader_parameter/border_scale = 2.0
 shader_parameter/border_near = 0.5
 shader_parameter/border_far = 300.0
-shader_parameter/refraction_intensity = 0.4
-shader_parameter/max_visible_depth = 10.0
-shader_parameter/color_deep = Color(0, 0.1, 0.4, 1)
+shader_parameter/cut_out_x = 0.0
+shader_parameter/cut_out_z = 0.0
 shader_parameter/wave_a = SubResource("NoiseTexture2D_qdptp")
 shader_parameter/wave_b = SubResource("NoiseTexture2D_w84gw")
 shader_parameter/surface_normals_a = SubResource("NoiseTexture2D_bcpi7")

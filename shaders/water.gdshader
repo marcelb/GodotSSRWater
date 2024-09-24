@@ -1,4 +1,5 @@
 shader_type spatial;
+
 render_mode cull_disabled, depth_draw_always;
 
 const float EPSILON = 1e-5;
@@ -11,6 +12,22 @@ uniform float transparency : hint_range(0.0, 1.0, 0.01) = 0.6;
 uniform float metallic : hint_range(0.0, 1.0, 0.01) = 0.45;
 uniform float roughness : hint_range(0.0, 1.0, 0.01) = 0.05;
 
+uniform float max_visible_depth : hint_range(0.1, 100.0, 0.1) = 10.0;
+uniform vec3 color_deep : source_color = vec3(0.0, 0.1, 0.4);
+
+uniform sampler2D wave_a;
+uniform sampler2D wave_b;
+uniform vec2 wave_move_direction_a = vec2(-1.0, 0.0);
+uniform vec2 wave_move_direction_b = vec2(0.0, 1.0);
+uniform float wave_noise_scale_a = 15.0;
+uniform float wave_noise_scale_b = 15.0;
+uniform float wave_time_scale_a = 0.025;
+uniform float wave_time_scale_b = 0.025;
+uniform float wave_height_scale = 0.4;
+uniform float wave_normal_flatness : hint_range(0.1, 100.0, 0.1) = 16.0;
+
+uniform sampler2D surface_normals_a;
+uniform sampler2D surface_normals_b;
 uniform vec2 surface_normals_move_direction_a = vec2(-1.0, 0.0);
 uniform vec2 surface_normals_move_direction_b = vec2(0.0, 1.0);
 uniform float surface_texture_roughness : hint_range(0.0, 1.0, 0.01) = 0.6;
@@ -22,54 +39,50 @@ uniform float ssr_max_travel   : hint_range(0.0, 200.0, 0.1) 	= 30.0;
 uniform float ssr_max_diff     : hint_range(0.1, 10.0, 0.1) 	= 4.0;
 uniform float ssr_mix_strength : hint_range(0.0, 1.0, 0.01) 	= 0.7;
 uniform float ssr_screen_border_fadeout: hint_range(0.0, 1.0, 0.1)	= 0.3;
+uniform int ssr_samples   : hint_range(1, 5, 1)	= 2;
+uniform float ssr_sample_radius: hint_range(0.0, 1.0, 0.1) = 0.2;
 
-uniform float wave_noise_scale = 15.0;
-uniform float wave_height_scale = 0.4;
-uniform float wave_time_scale = 0.025;
-uniform float wave_normal_flatness : hint_range(0.1, 100.0, 0.1) = 16.0;
+uniform float refraction_intensity : hint_range(0.0, 1.0, 0.01) = 0.4; 
 
 uniform vec3  border_color : source_color = vec3(1.0);
 uniform float border_scale : hint_range(0.0, 5.0, 0.01) = 2.0;
 uniform float border_near = 0.5;
 uniform float border_far = 300.0;
 
-uniform float refraction_intensity : hint_range(0.0, 1.0, 0.01) = 0.4; 
-
-uniform float max_visible_depth : hint_range(0.0, 100.0, 0.1) = 10.0;
-uniform vec3 color_deep : source_color = vec3(0.0, 0.1, 0.4);
-
-uniform sampler2D wave_a;
-uniform sampler2D wave_b;
-
-uniform sampler2D surface_normals_a;
-uniform sampler2D surface_normals_b;
+uniform float cut_out_x = 0.0;
+uniform float cut_out_z = 0.0;
 
 varying vec2 vertex_uv; 
+varying vec3 local_position;
 
-float get_wave_height(vec2 uv)
+float get_wave_height(vec2 uv_a, vec2 uv_b)
 {
-	float height1 = texture(wave_a, uv).y;
-	float height2 = texture(wave_b, uv).y;
+	float height1 = texture(wave_a, uv_a).y;
+	float height2 = texture(wave_b, uv_b).y;
 	return (height1 + height2) / 2.0;
 }
 
 void vertex()
 {
-	vertex_uv = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xz;
-	vec2 uv = vertex_uv / wave_noise_scale + TIME * wave_time_scale;
-	VERTEX.y += get_wave_height(uv) * wave_height_scale;
+	local_position = VERTEX;
+	
+	vertex_uv = (MODEL_MATRIX * vec4(local_position, 1.0)).xz;
+	vec2 uv_a = vertex_uv / wave_noise_scale_a + (wave_move_direction_a * TIME * wave_time_scale_a);
+	vec2 uv_b = vertex_uv / wave_noise_scale_b + (wave_move_direction_b * TIME * wave_time_scale_b);
+	VERTEX.y += get_wave_height(uv_a, uv_b) * wave_height_scale;
 	
 	float normal_height_scale = wave_height_scale / wave_normal_flatness;
 	vec2 e = vec2(0.01, 0.0);
 	vec3 normal = normalize(vec3(
-		get_wave_height(uv - e) * normal_height_scale - get_wave_height(uv + e) * normal_height_scale, 
+		get_wave_height(uv_a - e, uv_b - e) * normal_height_scale - get_wave_height(uv_a + e, uv_a + e) * normal_height_scale, 
 		2.0 * e.x, 
-		get_wave_height(uv - e.yx) * normal_height_scale - get_wave_height(uv + e.yx) * normal_height_scale
+		get_wave_height(uv_a - e.yx, uv_b - e.yx) * normal_height_scale - get_wave_height(uv_a + e.yx, uv_b + e.yx) * normal_height_scale
 		));
 	NORMAL = normal;
 }
 
-bool is_within_screen_boundaries(vec2 position) {
+bool is_within_screen_boundaries(vec2 position) 
+{
 	return position.x > 0.0 && position.x < 1.0 && position.y > 0.0 && position.y < 1.0;
 }
 
@@ -87,14 +100,16 @@ vec3 get_view_position_from_uv(vec2 uv, float depth, mat4 inv_proj_m)
 	return view_position.xyz /= view_position.w;
 }
 
-bool is_zero(float value) {
+bool is_zero(float value) 
+{
     return abs(value) < EPSILON;
 }
 
 float get_screen_border_alpha(vec2 screen_position)
 {
 
-	if (is_zero(ssr_screen_border_fadeout)) {
+	if (is_zero(ssr_screen_border_fadeout)) 
+	{
 		return 1.0;
 	}
 
@@ -142,7 +157,8 @@ float linear_depth(float cur_depth)
     return border_far * border_near / (border_near + cur_depth * (border_far - border_near));
 }
 
-float normalize_float(float min_v, float max_v, float value) {
+float normalize_float(float min_v, float max_v, float value) 
+{
 	float clamped_value = clamp(value, min_v, max_v);
 	return  (clamped_value - min_v) / (max_v - min_v);
 }
@@ -157,10 +173,13 @@ vec2 get_refracted_uv(vec2 raw_screen_uv, float screen_depth_raw, vec3 view, vec
 		return refraction_uv;
 }
 
-void fragment() {
+void fragment() 
+{
+	vec3 normal = FRONT_FACING ? NORMAL : -NORMAL;
+	
 	float screen_depth_raw = texture(DEPTH_TEXTURE, SCREEN_UV).x;
 	
-	vec2 refraction_uv = refraction_intensity > 0.0 ? get_refracted_uv(SCREEN_UV, screen_depth_raw, VIEW, NORMAL, PROJECTION_MATRIX, INV_PROJECTION_MATRIX) : SCREEN_UV;
+	vec2 refraction_uv = refraction_intensity > 0.0 ? get_refracted_uv(SCREEN_UV, screen_depth_raw, VIEW, normal, PROJECTION_MATRIX, INV_PROJECTION_MATRIX) : SCREEN_UV;
 	
 	float screen_depth = texture(DEPTH_TEXTURE, refraction_uv).x;
 	float surface_depth = FRAGCOORD.z;
@@ -171,7 +190,7 @@ void fragment() {
 	vec2 time_vector2 = (TIME * surface_normals_move_direction_b) * surface_texture_time_scale;
 	
 	vec3 normal_texture_blend 	= mix(texture(surface_normals_a, vertex_uv * surface_texture_scale + time_vector).xyz, texture(surface_normals_b, vertex_uv * surface_texture_scale + time_vector2).xyz, 0.5);
-	vec3 normal_blend 			= mix(NORMAL, normal_texture_blend, surface_texture_roughness);
+	vec3 normal_blend 			= mix(normal, normal_texture_blend, surface_texture_roughness);
 	
 	vec3 screen_view_position 	= get_view_position_from_uv(refraction_uv, screen_depth, INV_PROJECTION_MATRIX);
 	vec3 surface_view_position 	= get_view_position_from_uv(SCREEN_UV, surface_depth, INV_PROJECTION_MATRIX);
@@ -179,14 +198,24 @@ void fragment() {
 	
 	vec3 screen_color 				= texture(SCREEN_TEXTURE, refraction_uv).rgb;
 	vec3 surface_color 				= albedo;
-	vec4 ssr_color 					= get_ssr_color(surface_view_position, NORMAL, VIEW, PROJECTION_MATRIX, INV_PROJECTION_MATRIX);
+	vec4 ssr_color 					= get_ssr_color(surface_view_position, normal, VIEW, PROJECTION_MATRIX, INV_PROJECTION_MATRIX);
 	vec3 color_with_transparency 	= mix(surface_color, screen_color, transparency);
-	vec3 depth_color 				= mix(color_deep.rgb, color_with_transparency, depth_opacity);
+	vec3 depth_color 				= mix(color_deep.rgb, color_with_transparency, depth_opacity*transparency);
 	vec3 water_color 				= (ssr_color.x >= 0.0) ? mix(depth_color, ssr_color.rgb, ssr_mix_strength * ssr_color.a) : depth_color;
 	vec3 final_color				= mix(border_color, water_color, step(border_scale, border_diff));
+	
+	float cut_out_x_half = cut_out_x / 2.0;
+	float cut_out_z_half = cut_out_z / 2.0;
+	
+	if((local_position.x < cut_out_x_half && local_position.x > -cut_out_x_half) &&
+	(local_position.z < cut_out_z_half && local_position.z > -cut_out_z_half)) 
+	{
+		discard;
+	}
 	
 	ALBEDO.rgb = final_color;
 	METALLIC = metallic;
 	ROUGHNESS = roughness;
 	NORMAL_MAP = normal_blend;
+	NORMAL = normal;
 }

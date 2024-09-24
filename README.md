@@ -49,9 +49,14 @@ Especially the SSR settings have great impact on the shaders performance. In man
 | SSR Max Diff                       | The maximum diff from geometry that is counted as a ray-march hit. No performance impact. Low values might miss geometry, high values might create false positives. Aim for good looks. |
 | SSR Mix Strength                   | How visible the reflections are on the surface of the water. |
 | SSR Screen Border Fadeout          | Strength of fade-out effect on reflections close to the screen borders |
-| Wave Noise Scale                   | Scale of the 3D waves interpretation. Higher means wider waves. |
-| Wave Height Scale                  | The y-height of waves interpreted from the wave textures. |
-| Wave Time Scale                    | The waves speed. |
+| Wave A Move Direction              | The 2D vector of the Wave A texture. |
+| Wave B Move Direction              | The 2D vector of the Wave B texture. |
+| Wave Noise Scale A                 | Scale of the 3D waves interpretation for wave A. Higher means wider waves. |
+| Wave Noise Scale B                 | Scale of the 3D waves interpretation for wave B. Higher means wider waves. |
+| Wave Height Scale A                | The y-height of waves interpreted from the wave A texture. |
+| Wave Height Scale B                | The y-height of waves interpreted from the wave B texture. |
+| Wave Time Scale A                  | The wave A speed. |
+| Wave Time Scale B                  | The wave B speed. |
 | Wave Normal Flatness               | The flatness of the new calculated normals. Higher values are smoother. |
 | Border Color                       | The coastal border color. This is the foam around objects in the water. |
 | Border Scale                       | The size of the coastal border. |
@@ -60,6 +65,8 @@ Especially the SSR settings have great impact on the shaders performance. In man
 | Refraction Intensity               | The intensity of the refraction effect. 0 is no refraction at all. |
 | Max Visible Depth                  | The max depth that will be visible from the surface. After that it gets opaque. |
 | Color Deep                         | The opaque color of depths not visible. |
+| Cut Out X                          | The cut out in X direction. No pixels are rendered here. This can be useful, if an object resides in the middle that should not have a water surface inside. |
+| Cut Out Y                          | The cut out in Y direction. No pixels are rendered here. This can be useful, if an object resides in the middle that should not have a water surface inside. |
 | Wave A                             | The height texture for the wave layer A. Should be seamless and black and white, can be noise. |
 | Wave B                             | The height texture for the wave layer B. Should be seamless and black and white, can be noise. |
 | Surface Normals A                  | The normals texture with the surface normals for A. Should be seamless, can be noise. |
