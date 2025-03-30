@@ -1,12 +1,12 @@
 [gd_scene load_steps=37 format=3 uid="uid://ck1h771dply0g"]
 
-[ext_resource type="Script" path="res://scripts/Camera3D.gd" id="1_oowxb"]
-[ext_resource type="Script" path="res://World.gd" id="1_rau4y"]
-[ext_resource type="Shader" path="res://shaders/water.gdshader" id="2_6nog1"]
+[ext_resource type="Script" uid="uid://bhiorqmvhwey" path="res://scripts/Camera3D.gd" id="1_oowxb"]
+[ext_resource type="Script" uid="uid://c773ulbvhid87" path="res://World.gd" id="1_rau4y"]
+[ext_resource type="Shader" uid="uid://c3d638behmwd8" path="res://shaders/water.gdshader" id="2_6nog1"]
 [ext_resource type="Material" uid="uid://w0521xyotujb" path="res://standard_shaders/pink.tres" id="4_3d1xh"]
-[ext_resource type="Script" path="res://FogVolume.gd" id="4_lu0ui"]
+[ext_resource type="Script" uid="uid://dmwcfjvaeebvu" path="res://FogVolume.gd" id="4_lu0ui"]
 [ext_resource type="Material" uid="uid://due1qpgfoidud" path="res://standard_shaders/green.tres" id="5_731fp"]
-[ext_resource type="Shader" path="res://shaders/bottom.gdshader" id="6_dtw72"]
+[ext_resource type="Shader" uid="uid://cd01waniag8ip" path="res://shaders/bottom.gdshader" id="6_dtw72"]
 [ext_resource type="Material" uid="uid://khxhx4mnugb1" path="res://standard_shaders/yellow.tres" id="6_u1h6e"]
 [ext_resource type="PackedScene" uid="uid://durvbjhil7ec1" path="res://scenes/Pier.tscn" id="7_bj37i"]
 [ext_resource type="Texture2D" uid="uid://cmnmahdmhsq4h" path="res://assets/checker.png" id="8_56h6h"]
@@ -96,6 +96,8 @@ shader_parameter/transparency = 0.6
 shader_parameter/metallic = 0.0
 shader_parameter/roughness = 0.25
 shader_parameter/max_visible_depth = 20.0
+shader_parameter/wave_a = SubResource("NoiseTexture2D_qdptp")
+shader_parameter/wave_b = SubResource("NoiseTexture2D_w84gw")
 shader_parameter/wave_move_direction_a = Vector2(-1, 0)
 shader_parameter/wave_move_direction_b = Vector2(0, 1)
 shader_parameter/wave_noise_scale_a = 15.0
@@ -104,6 +106,8 @@ shader_parameter/wave_time_scale_a = 0.15
 shader_parameter/wave_time_scale_b = 0.15
 shader_parameter/wave_height_scale = 1.0
 shader_parameter/wave_normal_flatness = 50.0
+shader_parameter/surface_normals_a = SubResource("NoiseTexture2D_bcpi7")
+shader_parameter/surface_normals_b = SubResource("NoiseTexture2D_r4a3k")
 shader_parameter/surface_normals_move_direction_a = Vector2(-1, 0.2)
 shader_parameter/surface_normals_move_direction_b = Vector2(0.2, 1)
 shader_parameter/surface_texture_roughness = 0.15
@@ -121,10 +125,6 @@ shader_parameter/border_near = 0.5
 shader_parameter/border_far = 300.0
 shader_parameter/cut_out_x = 0.0
 shader_parameter/cut_out_z = 0.0
-shader_parameter/wave_a = SubResource("NoiseTexture2D_qdptp")
-shader_parameter/wave_b = SubResource("NoiseTexture2D_w84gw")
-shader_parameter/surface_normals_a = SubResource("NoiseTexture2D_bcpi7")
-shader_parameter/surface_normals_b = SubResource("NoiseTexture2D_r4a3k")
 
 [sub_resource type="FogMaterial" id="FogMaterial_vcxox"]
 density = 0.2
