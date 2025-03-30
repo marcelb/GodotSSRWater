@@ -38,71 +38,82 @@ volumetric_fog_density = 0.0
 volumetric_fog_length = 500.0
 volumetric_fog_sky_affect = 0.0
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_hnmyy"]
-size = Vector2(320, 320)
-subdivide_width = 400
-subdivide_depth = 400
+[sub_resource type="BoxMesh" id="BoxMesh_mowvp"]
+size = Vector3(320, 0.2, 320)
+subdivide_width = 300
+subdivide_depth = 300
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_d0y3h"]
-frequency = 0.0043
+noise_type = 0
+frequency = 0.007
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_bcpi7"]
+generate_mipmaps = false
 seamless = true
+seamless_blend_skirt = 0.5
 as_normal_map = true
 noise = SubResource("FastNoiseLite_d0y3h")
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_6i3b2"]
 noise_type = 0
-seed = 1
+frequency = 0.02
+fractal_type = 0
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_r4a3k"]
+generate_mipmaps = false
 seamless = true
+seamless_blend_skirt = 0.5
 as_normal_map = true
-bump_strength = 1.0
 noise = SubResource("FastNoiseLite_6i3b2")
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_5edmb"]
-frequency = 0.0111
+frequency = 0.0005
 fractal_type = 2
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_qdptp"]
+generate_mipmaps = false
 seamless = true
+seamless_blend_skirt = 0.5
 noise = SubResource("FastNoiseLite_5edmb")
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_tf0ow"]
+noise_type = 3
+frequency = 0.0225
+fractal_type = 0
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_w84gw"]
+generate_mipmaps = false
+seamless = true
+seamless_blend_skirt = 0.5
 noise = SubResource("FastNoiseLite_tf0ow")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_jsv1i"]
-render_priority = 0
+render_priority = -128
 shader = ExtResource("2_6nog1")
-shader_parameter/albedo = Color(0.02, 0.45, 0.8, 1)
+shader_parameter/color_shallow = Color(0.01, 0.2, 0.3, 1)
+shader_parameter/color_deep = Color(0.3, 0.5, 0.6, 1)
 shader_parameter/transparency = 0.6
-shader_parameter/metallic = 0.45
-shader_parameter/roughness = 0.05
-shader_parameter/max_visible_depth = 10.0
-shader_parameter/color_deep = Color(0, 0.1, 0.4, 1)
+shader_parameter/metallic = 0.0
+shader_parameter/roughness = 0.25
+shader_parameter/max_visible_depth = 20.0
 shader_parameter/wave_move_direction_a = Vector2(-1, 0)
 shader_parameter/wave_move_direction_b = Vector2(0, 1)
 shader_parameter/wave_noise_scale_a = 15.0
 shader_parameter/wave_noise_scale_b = 15.0
-shader_parameter/wave_time_scale_a = 0.025
-shader_parameter/wave_time_scale_b = 0.025
-shader_parameter/wave_height_scale = 0.4
-shader_parameter/wave_normal_flatness = 16.0
-shader_parameter/surface_normals_move_direction_a = Vector2(-1, 0)
-shader_parameter/surface_normals_move_direction_b = Vector2(0, 1)
-shader_parameter/surface_texture_roughness = 0.6
-shader_parameter/surface_texture_scale = 0.3
+shader_parameter/wave_time_scale_a = 0.15
+shader_parameter/wave_time_scale_b = 0.15
+shader_parameter/wave_height_scale = 1.0
+shader_parameter/wave_normal_flatness = 50.0
+shader_parameter/surface_normals_move_direction_a = Vector2(-1, 0.2)
+shader_parameter/surface_normals_move_direction_b = Vector2(0.2, 1)
+shader_parameter/surface_texture_roughness = 0.15
+shader_parameter/surface_texture_scale = 0.1
 shader_parameter/surface_texture_time_scale = 0.06
-shader_parameter/ssr_resolution = 2.0
+shader_parameter/ssr_resolution = 1.0
 shader_parameter/ssr_max_travel = 30.0
 shader_parameter/ssr_max_diff = 4.0
 shader_parameter/ssr_mix_strength = 0.7
 shader_parameter/ssr_screen_border_fadeout = 0.3
-shader_parameter/ssr_samples = 2
-shader_parameter/ssr_sample_radius = 0.2
 shader_parameter/refraction_intensity = 0.4
 shader_parameter/border_color = Color(1, 1, 1, 1)
 shader_parameter/border_scale = 2.0
@@ -117,7 +128,7 @@ shader_parameter/surface_normals_b = SubResource("NoiseTexture2D_r4a3k")
 
 [sub_resource type="FogMaterial" id="FogMaterial_vcxox"]
 density = 0.2
-albedo = Color(0.0196078, 0.447059, 0.8, 1)
+albedo = Color(0.0215691, 0.571161, 0.871674, 1)
 height_falloff = 100.0
 edge_fade = 0.0517
 
@@ -192,11 +203,11 @@ script = ExtResource("1_oowxb")
 
 [node name="WaterSurface" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0266228, 0.112858, -0.0368958)
-mesh = SubResource("PlaneMesh_hnmyy")
+mesh = SubResource("BoxMesh_mowvp")
 surface_material_override/0 = SubResource("ShaderMaterial_jsv1i")
 
 [node name="FogVolume" type="FogVolume" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.205, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.832703, 0.142015, -0.829834)
 shape = 4
 material = SubResource("FogMaterial_vcxox")
 script = ExtResource("4_lu0ui")
@@ -236,7 +247,7 @@ surface_material_override/0 = ExtResource("6_u1h6e")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.0822, 0, 0)
 
 [node name="Sphere1" type="MeshInstance3D" parent="scenery/spheres"]
-transform = Transform3D(1, -5.96046e-08, -3.57628e-07, -1.49012e-08, 1, 1.04308e-07, 1.19209e-07, -5.96046e-08, 1, -134.465, 18.4207, -48.0399)
+transform = Transform3D(1, -5.96046e-08, -3.57628e-07, -1.49012e-08, 1, 1.04308e-07, 1.19209e-07, -5.96046e-08, 1, -134.465, 13.7421, -48.0399)
 mesh = SubResource("SphereMesh_0b3qk")
 skeleton = NodePath("../../..")
 surface_material_override/0 = ExtResource("4_3d1xh")
