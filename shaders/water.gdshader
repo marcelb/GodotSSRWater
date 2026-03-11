@@ -63,13 +63,9 @@ float get_wave_height(vec2 uv_a, vec2 uv_b)
 
 vec3 get_mixed_normals(vec3 color1, vec3 color2) 
 {
-    vec3 normal1 = normalize(color1 * 2.0 - 1.0);
-    vec3 normal2 = normalize(color2 * 2.0 - 1.0);
-    vec3 up = vec3(0.0, 0.0, 1.0);
-    vec3 tangent = normalize(normal1 + normal2);
-    vec3 binormal = normalize(cross(up, tangent));
-    vec3 mixedNormal = normalize(cross(tangent, binormal));
-    return mixedNormal * 0.5;
+    vec3 n1 = color1 * 2.0 - 1.0;
+    vec3 n2 = color2 * 2.0 - 1.0;
+    return normalize(vec3(n1.xy + n2.xy, n1.z * n2.z));
 }
 
 void vertex()
@@ -84,7 +80,7 @@ void vertex()
 	float normal_height_scale = wave_height_scale / wave_normal_flatness;
 	vec2 e = vec2(0.01, 0.0);
 	vec3 normal = normalize(vec3(
-		get_wave_height(uv_a - e, uv_b - e) * normal_height_scale - get_wave_height(uv_a + e, uv_a + e) * normal_height_scale, 
+		get_wave_height(uv_a - e, uv_b - e) * normal_height_scale - get_wave_height(uv_a + e, uv_b + e) * normal_height_scale, 
 		2.0 * e.x, 
 		get_wave_height(uv_a - e.yx, uv_b - e.yx) * normal_height_scale - get_wave_height(uv_a + e.yx, uv_b + e.yx) * normal_height_scale
 		));
