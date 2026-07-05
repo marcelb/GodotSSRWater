@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://ck1h771dply0g"]
+[gd_scene format=3 uid="uid://ck1h771dply0g"]
 
 [ext_resource type="Script" uid="uid://bhiorqmvhwey" path="res://scripts/Camera3D.gd" id="1_oowxb"]
 [ext_resource type="Script" uid="uid://c773ulbvhid87" path="res://World.gd" id="1_rau4y"]
@@ -49,10 +49,10 @@ frequency = 0.007
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_bcpi7"]
 generate_mipmaps = false
-seamless = true
-seamless_blend_skirt = 0.5
-as_normal_map = true
 noise = SubResource("FastNoiseLite_d0y3h")
+seamless = true
+as_normal_map = true
+seamless_blend_skirt = 0.5
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_6i3b2"]
 noise_type = 0
@@ -61,10 +61,10 @@ fractal_type = 0
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_r4a3k"]
 generate_mipmaps = false
-seamless = true
-seamless_blend_skirt = 0.5
-as_normal_map = true
 noise = SubResource("FastNoiseLite_6i3b2")
+seamless = true
+as_normal_map = true
+seamless_blend_skirt = 0.5
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_5edmb"]
 frequency = 0.0005
@@ -72,9 +72,9 @@ fractal_type = 2
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_qdptp"]
 generate_mipmaps = false
+noise = SubResource("FastNoiseLite_5edmb")
 seamless = true
 seamless_blend_skirt = 0.5
-noise = SubResource("FastNoiseLite_5edmb")
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_tf0ow"]
 noise_type = 3
@@ -83,9 +83,9 @@ fractal_type = 0
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_w84gw"]
 generate_mipmaps = false
+noise = SubResource("FastNoiseLite_tf0ow")
 seamless = true
 seamless_blend_skirt = 0.5
-noise = SubResource("FastNoiseLite_tf0ow")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_jsv1i"]
 render_priority = -128
@@ -163,8 +163,8 @@ subdivide_depth = 200
 frequency = 0.0056
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_lawpj"]
-seamless = true
 noise = SubResource("FastNoiseLite_8j0ft")
+seamless = true
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_65ep2"]
 noise_type = 4
@@ -173,8 +173,8 @@ frequency = 0.5041
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ko5xt"]
 width = 1024
 height = 1024
-seamless = true
 noise = SubResource("FastNoiseLite_65ep2")
+seamless = true
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_y71r8"]
 render_priority = 0
@@ -185,91 +185,91 @@ shader_parameter/texture_scale = 20.0
 shader_parameter/stone_texture = SubResource("NoiseTexture2D_ko5xt")
 shader_parameter/bottom = SubResource("NoiseTexture2D_lawpj")
 
-[node name="World" type="Node3D"]
+[node name="World" type="Node3D" unique_id=1580914958]
 script = ExtResource("1_rau4y")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=34544213]
 environment = SubResource("Environment_nbsfo")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=2019232175]
 transform = Transform3D(-0.864275, 0.42705, -0.265815, 0, 0.528438, 0.848972, 0.50302, 0.733745, -0.456716, -103.155, 28.088, -116.302)
 light_color = Color(1, 0.956863, 0.905882, 1)
 light_energy = 1.08
 shadow_enabled = true
 
-[node name="Camera3D" type="Camera3D" parent="."]
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1583051809]
 transform = Transform3D(-0.745476, 0.21039, -0.632457, 0, 0.948876, 0.315649, 0.666533, 0.235309, -0.707364, -129.747, 14.606, -113.29)
 script = ExtResource("1_oowxb")
 
-[node name="WaterSurface" type="MeshInstance3D" parent="."]
+[node name="WaterSurface" type="MeshInstance3D" parent="." unique_id=1569393090]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0266228, 0.112858, -0.0368958)
 mesh = SubResource("BoxMesh_mowvp")
 surface_material_override/0 = SubResource("ShaderMaterial_jsv1i")
 
-[node name="FogVolume" type="FogVolume" parent="."]
+[node name="FogVolume" type="FogVolume" parent="." unique_id=734096329]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.832703, 0.142015, -0.829834)
 shape = 4
 material = SubResource("FogMaterial_vcxox")
 script = ExtResource("4_lu0ui")
 
-[node name="scenery" type="Node3D" parent="."]
+[node name="scenery" type="Node3D" parent="." unique_id=1512548551]
 
-[node name="Chessboard" type="MeshInstance3D" parent="scenery"]
+[node name="Chessboard" type="MeshInstance3D" parent="scenery" unique_id=795583243]
 transform = Transform3D(0.741616, -0.139773, 0.656101, -0.16291, 0.911247, 0.378272, -0.650742, -0.387418, 0.653025, -68.4752, -4.30671, -56.5773)
 mesh = SubResource("BoxMesh_x3ff0")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("StandardMaterial3D_rx107")
 
-[node name="Pier" parent="scenery" instance=ExtResource("7_bj37i")]
+[node name="Pier" parent="scenery" unique_id=1880693561 instance=ExtResource("7_bj37i")]
 transform = Transform3D(-1.99631, 0, 0.121435, 0, 2, 0, -0.121435, 0, -1.99631, -42.0222, 4.60747, -76.6392)
 
-[node name="boxes" type="Node3D" parent="scenery"]
+[node name="boxes" type="Node3D" parent="scenery" unique_id=7815973]
 
-[node name="Box1" type="MeshInstance3D" parent="scenery/boxes"]
+[node name="Box1" type="MeshInstance3D" parent="scenery/boxes" unique_id=1293035462]
 transform = Transform3D(0.57211, -0.456602, -0.681325, 0.636205, 0.771326, 0.0173053, 0.517622, -0.443363, 0.731776, -134.206, 4.05422, -77.1431)
 mesh = SubResource("BoxMesh_21ju6")
 skeleton = NodePath("../../..")
 surface_material_override/0 = ExtResource("4_3d1xh")
 
-[node name="Box2" type="MeshInstance3D" parent="scenery/boxes"]
+[node name="Box2" type="MeshInstance3D" parent="scenery/boxes" unique_id=1905053116]
 transform = Transform3D(-0.735081, 0.599193, 0.317212, 0.636205, 0.771326, 0.0173053, -0.234305, 0.214533, -0.948197, -116.454, 4.05422, -77.1431)
 mesh = SubResource("BoxMesh_21ju6")
 skeleton = NodePath("../../..")
 surface_material_override/0 = ExtResource("5_731fp")
 
-[node name="Box3" type="MeshInstance3D" parent="scenery/boxes"]
+[node name="Box3" type="MeshInstance3D" parent="scenery/boxes" unique_id=1914744162]
 transform = Transform3D(-0.434076, 0.376398, -0.818476, 0.636205, 0.771326, 0.0173053, 0.637825, -0.513207, -0.574281, -99.6248, 4.05422, -77.1431)
 mesh = SubResource("BoxMesh_21ju6")
 skeleton = NodePath("../../..")
 surface_material_override/0 = ExtResource("6_u1h6e")
 
-[node name="spheres" type="Node3D" parent="scenery"]
+[node name="spheres" type="Node3D" parent="scenery" unique_id=1918809125]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.0822, 0, 0)
 
-[node name="Sphere1" type="MeshInstance3D" parent="scenery/spheres"]
+[node name="Sphere1" type="MeshInstance3D" parent="scenery/spheres" unique_id=1469845859]
 transform = Transform3D(1, -5.96046e-08, -3.57628e-07, -1.49012e-08, 1, 1.04308e-07, 1.19209e-07, -5.96046e-08, 1, -134.465, 13.7421, -48.0399)
 mesh = SubResource("SphereMesh_0b3qk")
 skeleton = NodePath("../../..")
 surface_material_override/0 = ExtResource("4_3d1xh")
 
-[node name="Sphere2" type="MeshInstance3D" parent="scenery/spheres"]
+[node name="Sphere2" type="MeshInstance3D" parent="scenery/spheres" unique_id=156701746]
 transform = Transform3D(1, -5.96046e-08, -3.57628e-07, -1.49012e-08, 1, 1.04308e-07, 1.19209e-07, -5.96046e-08, 1, -116.925, 8.32512, -48.0399)
 mesh = SubResource("SphereMesh_37lja")
 skeleton = NodePath("../../..")
 surface_material_override/0 = ExtResource("5_731fp")
 
-[node name="Sphere3" type="MeshInstance3D" parent="scenery/spheres"]
+[node name="Sphere3" type="MeshInstance3D" parent="scenery/spheres" unique_id=1912142070]
 transform = Transform3D(1, -5.96046e-08, -3.57628e-07, -1.49012e-08, 1, 1.04308e-07, 1.19209e-07, -5.96046e-08, 1, -103.868, 0.811209, -48.0399)
 mesh = SubResource("SphereMesh_un52x")
 skeleton = NodePath("../../..")
 surface_material_override/0 = ExtResource("6_u1h6e")
 
-[node name="Bottom" type="MeshInstance3D" parent="scenery"]
+[node name="Bottom" type="MeshInstance3D" parent="scenery" unique_id=1195205662]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.4921, -31.6516, 0)
 mesh = SubResource("PlaneMesh_x888m")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("ShaderMaterial_y71r8")
 
-[node name="CurrentFPS" type="Label" parent="."]
+[node name="CurrentFPS" type="Label" parent="." unique_id=1612679154]
 offset_right = 40.0
 offset_bottom = 23.0
